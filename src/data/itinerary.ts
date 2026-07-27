@@ -233,7 +233,7 @@ export const itinerary: ItineraryDay[] = [
     parkId: "animal-kingdom",
     highlight: "🎉 Cumpleaños Maria Alejandra Diaz — cena especial",
     description:
-      "Entrada temprana Disney (~08:30). Avatar y Everest primero, safari de día, salir ~16:30 para la cena de los 60.",
+      "Entrada temprana Disney (~08:30). Avatar y Everest primero, safari de día, salir ~16:30 y a las ~20 hs cenar y festejar los 60 en un lugar especial.",
     activities: [
       {
         time: "06:30",
@@ -254,20 +254,15 @@ export const itinerary: ItineraryDay[] = [
         type: "park",
       },
       {
-        title: "Must-dos",
-        detail: "Flight of Passage · Everest · Kilimanjaro Safaris",
-        type: "park",
-      },
-      {
         time: "~16:30",
         title: "Salir del parque",
         detail: "Volver al hotel a cambiarse",
         type: "transfer",
       },
       {
-        time: "18:30–19:30",
-        title: "Cena cumpleaños",
-        detail: "Default: Capa (Four Seasons) — por confirmar",
+        time: "~20:00",
+        title: "Cenar y festejar los 60",
+        detail: "En un lugar especial — default: Capa (Four Seasons)",
         type: "meal",
       },
     ],
@@ -282,7 +277,7 @@ export const itinerary: ItineraryDay[] = [
     theme: "shopping",
     chapter: "disney",
     description:
-      "Cierre del tramo Disney: check-out All-Star, check-in Endless Summer y 1–2 centros de shopping máx.",
+      "Cierre del tramo Disney: check-out All-Star, check-in Endless Summer… y permiso oficial para volverse locos de shopping (1–2 centros máx.).",
     activities: [
       {
         time: "08:00",
@@ -303,8 +298,9 @@ export const itinerary: ItineraryDay[] = [
         type: "hotel",
       },
       {
-        title: "Shopping Orlando",
-        detail: "1–2 centros máx. (outlets / mall)",
+        time: "~13:00",
+        title: "Ir de shopping",
+        detail: "Modo: volverse locos de shopping 🛍️ (1–2 centros máx., outlets / mall)",
         type: "shopping",
       },
       {

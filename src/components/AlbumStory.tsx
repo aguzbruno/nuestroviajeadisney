@@ -19,6 +19,7 @@ import {
   ALBUM_SPREAD_PARAM,
   parseAlbumSpreadParam,
 } from "@/lib/albumNav";
+import { unlockAlbumNav, isAlbumNavUnlocked, ALBUM_NAV_UNLOCKED_EVENT } from "@/lib/storage";
 
 export type AlbumSpread = {
   id: string;
@@ -81,12 +82,22 @@ export function AlbumStory({ cover, spreads }: Props) {
     const target = parseAlbumSpreadParam(params);
     setRestored(true);
     if (target == null) return;
+    // Volvió desde otra sección → ya no es la primera visita inmersiva.
+    unlockAlbumNav();
     const clamped = Math.min(target, Math.max(spreadsRef.current.length - 1, 0));
     setOpened(true);
     setIndex(clamped);
     busy.current = false;
     window.setTimeout(() => maybeCelebrate(clamped), 400);
   }, [restored, maybeCelebrate]);
+
+  // Al llegar al último pliego, desbloquear la navbar.
+  useEffect(() => {
+    if (!opened || !restored) return;
+    if (index >= spreads.length - 1) {
+      unlockAlbumNav();
+    }
+  }, [opened, index, restored, spreads.length]);
 
   // Sync del pliego en la URL mientras el álbum está abierto.
   useEffect(() => {
@@ -179,7 +190,22 @@ export function AlbumStory({ cover, spreads }: Props) {
     return () => {
       document.body.style.overflow = prevOverflow;
       delete document.body.dataset.albumMode;
+      delete document.body.dataset.albumImmersive;
     };
+  }, []);
+
+  useEffect(() => {
+    const immersive = !isAlbumNavUnlocked();
+    if (immersive) {
+      document.body.dataset.albumImmersive = "true";
+    } else {
+      delete document.body.dataset.albumImmersive;
+    }
+    function onUnlock() {
+      delete document.body.dataset.albumImmersive;
+    }
+    window.addEventListener(ALBUM_NAV_UNLOCKED_EVENT, onUnlock);
+    return () => window.removeEventListener(ALBUM_NAV_UNLOCKED_EVENT, onUnlock);
   }, []);
 
   const canPrev = opened;
@@ -204,7 +230,7 @@ export function AlbumStory({ cover, spreads }: Props) {
           />
 
           <div
-            className="relative w-full max-w-[1100px] h-full max-h-[min(720px,calc(100dvh-5.5rem))]"
+            className="relative w-full max-w-[1100px] h-full max-h-[min(720px,calc(100dvh-5.5rem))] album-book-frame"
             style={{ perspective: "2800px" }}
           >
             <AnimatePresence mode="wait" initial={false}>

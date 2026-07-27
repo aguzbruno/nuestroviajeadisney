@@ -351,3 +351,7 @@ h3,
 body[data-album-mode="true"] > footer {
   display: none;
 }
+
+body[data-album-immersive="true"] .album-book-frame {
+  max-height: min(720px, calc(100dvh - 1.5rem));
+}

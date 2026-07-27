@@ -341,7 +341,7 @@ export function AlbumDayLeaf({
   const description = day.description ?? dayDescriptions[day.day];
   const highlight = highlightForVisitor(day, visitor?.id);
   const earlyEntry = earlyEntryForDay(day);
-  const activities = activitiesForVisitor(day, visitor?.id).slice(0, 4);
+  const activities = activitiesForVisitor(day, visitor?.id);
   const tiltAlt = day.day % 2 === 0;
 
   let detailHref: string | null = null;
@@ -459,7 +459,7 @@ export function AlbumDayLeaf({
           </div>
         )}
 
-        <ul className="mt-2 flex-1 space-y-1">
+        <ul className="mt-2 min-h-0 flex-1 space-y-1 overflow-y-auto">
           {activities.map((a) => (
             <li
               key={`${a.title}-${a.time ?? ""}`}

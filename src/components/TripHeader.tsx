@@ -7,9 +7,13 @@ import { Logo } from "@/components/Logo";
 import { ChevronDown, Menu, X, Sparkles } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
+import {
+  ALBUM_NAV_UNLOCKED_EVENT,
+  isAlbumNavUnlocked,
+} from "@/lib/storage";
 
 const primaryLinks = [
-  { href: "/", label: "Inicio" },
+  { href: "/", label: "Álbum" },
   { href: "/calendario", label: "Calendario" },
   { href: "/disney", label: "Disney" },
   { href: "/universal", label: "Universal" },
@@ -21,7 +25,7 @@ const moreLinks = [
   { href: "/vuelos", label: "Vuelos" },
   { href: "/hoteles", label: "Hoteles" },
   { href: "/shopping", label: "Shopping" },
-  { href: "/album", label: "Álbum" },
+  { href: "/album", label: "Stickers" },
   { href: "/ideas", label: "Ideas & packing" },
 ];
 
@@ -40,9 +44,23 @@ export function TripHeader() {
   const pathname = usePathname();
   const [open, setOpen] = useState(false);
   const [moreOpen, setMoreOpen] = useState(false);
+  const [albumNavUnlocked, setAlbumNavUnlocked] = useState<boolean | null>(
+    null,
+  );
   const moreRef = useRef<HTMLDivElement>(null);
 
   const moreIsActive = moreLinks.some((l) => linkActive(pathname, l.href));
+  // En `/` ocultar hasta confirmar desbloqueo (primera visita inmersiva).
+  const hideOnAlbum = pathname === "/" && albumNavUnlocked !== true;
+
+  useEffect(() => {
+    setAlbumNavUnlocked(isAlbumNavUnlocked());
+    function onUnlock() {
+      setAlbumNavUnlocked(true);
+    }
+    window.addEventListener(ALBUM_NAV_UNLOCKED_EVENT, onUnlock);
+    return () => window.removeEventListener(ALBUM_NAV_UNLOCKED_EVENT, onUnlock);
+  }, []);
 
   useEffect(() => {
     function onClick(e: MouseEvent) {
@@ -53,6 +71,8 @@ export function TripHeader() {
     document.addEventListener("mousedown", onClick);
     return () => document.removeEventListener("mousedown", onClick);
   }, []);
+
+  if (hideOnAlbum) return null;
 
   return (
     <header className="sticky top-0 z-50 backdrop-blur-md bg-cream/80 border-b border-white/40">

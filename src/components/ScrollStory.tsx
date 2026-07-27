@@ -22,6 +22,10 @@ import {
 } from "@/components/AlbumLeaves";
 import { AlbumCoverArt } from "@/components/AlbumCoverArt";
 import type { ItineraryDay } from "@/types/trip";
+import {
+  ALBUM_NAV_UNLOCKED_EVENT,
+  isAlbumNavUnlocked,
+} from "@/lib/storage";
 
 function Chapter({
   id,
@@ -411,6 +415,16 @@ function DesktopAlbum({
   onShuffle: () => void;
 }) {
   const { visitor } = useVisitor();
+  const [navUnlocked, setNavUnlocked] = useState(false);
+
+  useEffect(() => {
+    setNavUnlocked(isAlbumNavUnlocked());
+    function onUnlock() {
+      setNavUnlocked(true);
+    }
+    window.addEventListener(ALBUM_NAV_UNLOCKED_EVENT, onUnlock);
+    return () => window.removeEventListener(ALBUM_NAV_UNLOCKED_EVENT, onUnlock);
+  }, []);
 
   const spreads: AlbumSpread[] = useMemo(() => {
     const disney = itinerary.filter((d) => d.chapter === "disney");
@@ -493,14 +507,14 @@ function DesktopAlbum({
     ];
   }, [surprise, onShuffle]);
 
+  const albumHeightClass = !navUnlocked
+    ? "h-dvh"
+    : visitor?.birthdayMode
+      ? "h-[calc(100dvh-7.25rem)]"
+      : "h-[calc(100dvh-4.75rem)]";
+
   return (
-    <div
-      className={
-        visitor?.birthdayMode
-          ? "h-[calc(100dvh-7.25rem)]"
-          : "h-[calc(100dvh-4.75rem)]"
-      }
-    >
+    <div className={albumHeightClass}>
       <AlbumStory cover={<AlbumCoverArt />} spreads={spreads} />
     </div>
   );

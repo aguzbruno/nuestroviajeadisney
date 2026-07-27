@@ -10,7 +10,7 @@ function BackToAlbumInner() {
   const searchParams = useSearchParams();
   const href = getAlbumReturnHref(searchParams);
 
-  // El álbum vive en inicio: no mostrar el volver ahí.
+  // El álbum vive en /: no mostrar el volver ahí.
   if (!href || pathname === "/") return null;
 
   return (

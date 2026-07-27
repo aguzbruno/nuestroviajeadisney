@@ -5,6 +5,10 @@ const FEARLIST_KEY = "disney-trip-fearlist";
 const PACKING_KEY = "disney-trip-packing";
 const MICKEY_KEY = "disney-trip-mickeys";
 const DAYS_KEY = "disney-trip-days";
+const ALBUM_NAV_KEY = "disney-trip-album-nav";
+
+/** Disparado al desbloquear la navbar del álbum (misma pestaña). */
+export const ALBUM_NAV_UNLOCKED_EVENT = "album-nav-unlocked";
 
 function canUseStorage() {
   return typeof window !== "undefined";
@@ -142,4 +146,17 @@ export function exploreDay(day: number) {
   if (!current.includes(day)) {
     localStorage.setItem(DAYS_KEY, JSON.stringify([...current, day]));
   }
+}
+
+/** Primera visita al álbum: navbar oculta hasta salir o terminar. */
+export function isAlbumNavUnlocked(): boolean {
+  if (!canUseStorage()) return false;
+  return localStorage.getItem(ALBUM_NAV_KEY) === "1";
+}
+
+export function unlockAlbumNav() {
+  if (!canUseStorage()) return;
+  if (localStorage.getItem(ALBUM_NAV_KEY) === "1") return;
+  localStorage.setItem(ALBUM_NAV_KEY, "1");
+  window.dispatchEvent(new Event(ALBUM_NAV_UNLOCKED_EVENT));
 }
