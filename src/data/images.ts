@@ -39,6 +39,17 @@ export const images = {
     "https://images.unsplash.com/photo-1578230706129-5e3ebca647d3?w=900&q=80",
   coverNyc:
     "https://images.unsplash.com/photo-1477959858617-67f85cf4f1df?w=900&q=80",
+  /** Portadas de capítulo (distintas a las fotos de cada día) */
+  chapterSalida:
+    "https://images.unsplash.com/photo-1436491865332-7a61a109cc05?w=1200&q=80",
+  chapterDisney:
+    "https://images.unsplash.com/photo-1566737236500-c8ac43014a67?w=1200&q=80",
+  chapterUniversal:
+    "https://images.unsplash.com/photo-1533174072545-7a4b6ad7a6c3?w=1200&q=80",
+  chapterNyc:
+    "https://images.unsplash.com/photo-1518391846015-55a9cc003b25?w=1200&q=80",
+  chapterHhn:
+    "https://images.unsplash.com/photo-1509248961158-e54f6934749c?w=1200&q=80",
 };
 
 export const dayImages: Record<number, string> = {

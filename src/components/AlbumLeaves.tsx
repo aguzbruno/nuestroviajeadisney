@@ -193,31 +193,31 @@ const CHAPTER_THEME: Record<
   "✈️": {
     blob: "#7ec8e355",
     badge: "#1a5fb4",
-    image: images.plane,
+    image: images.chapterSalida,
     sticker: "plane",
   },
   "🏰": {
     blob: "#f0c14b55",
     badge: "#1a5fb4",
-    image: images.coverOrlando,
+    image: images.chapterDisney,
     sticker: "castle",
   },
   "🎢": {
     blob: "#ff8fab55",
     badge: "#e31c23",
-    image: images.epicUniverse,
+    image: images.chapterUniversal,
     sticker: "ride",
   },
   "🗽": {
     blob: "#9b59b655",
     badge: "#6c3483",
-    image: images.coverNyc,
+    image: images.chapterNyc,
     sticker: "liberty",
   },
   "🎃": {
     blob: "#ff6b3555",
     badge: "#ff6b35",
-    image: images.halloween,
+    image: images.chapterHhn,
     sticker: "moon",
   },
 };
