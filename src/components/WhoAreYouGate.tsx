@@ -321,20 +321,27 @@ export function WhoAreYouGate() {
             >
               {traveler.birthdayMode && (
                 <div className="pointer-events-none absolute inset-0 z-10 overflow-hidden rounded-[1.75rem]">
-                  {[...Array(16)].map((_, i) => (
-                    <motion.span
-                      key={i}
-                      className="absolute text-xl"
-                      initial={{ y: -20, x: `${(i * 6) % 100}%`, opacity: 1 }}
-                      animate={{ y: 420, opacity: 0 }}
-                      transition={{
-                        duration: 2 + (i % 5) * 0.3,
-                        repeat: Infinity,
-                      }}
-                    >
-                      {i % 3 === 0 ? "🎉" : i % 3 === 1 ? "✨" : "🎂"}
-                    </motion.span>
-                  ))}
+                  {[...Array(16)].map((_, i) => {
+                    const left = `${(i * 37 + 11) % 92}%`;
+                    const startY = -24 - (i % 4) * 18;
+                    return (
+                      <motion.span
+                        key={i}
+                        className="absolute text-xl"
+                        style={{ left }}
+                        initial={{ y: startY, opacity: 1, rotate: -12 + (i % 5) * 6 }}
+                        animate={{ y: 420, opacity: 0, rotate: 12 + (i % 3) * 8 }}
+                        transition={{
+                          duration: 2 + (i % 5) * 0.3,
+                          delay: (i % 8) * 0.18,
+                          repeat: Infinity,
+                          ease: "linear",
+                        }}
+                      >
+                        {i % 3 === 0 ? "🎉" : i % 3 === 1 ? "✨" : "🎂"}
+                      </motion.span>
+                    );
+                  })}
                 </div>
               )}
 
