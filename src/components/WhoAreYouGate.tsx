@@ -366,15 +366,15 @@ export function WhoAreYouGate() {
                 </p>
 
                 {traveler.birthdayMode && (
-                  <div className="mt-4 inline-flex rounded-full bg-[#fff1c9] px-4 py-2 font-display text-sm font-bold text-[#8a6a10]">
+                  <p className="mt-5 font-display text-base font-bold text-[#1a5fb4]">
                     Festejamos tus 60 el 04/10 ✨
-                  </div>
+                  </p>
                 )}
 
                 <button
                   type="button"
                   onClick={confirm}
-                  className="album-cta mx-auto mt-6"
+                  className={`album-cta mx-auto ${traveler.birthdayMode ? "mt-3" : "mt-6"}`}
                 >
                   ¡Empezar la aventura!
                 </button>
