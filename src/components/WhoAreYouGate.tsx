@@ -20,6 +20,15 @@ type YtPlayer = {
   stopVideo: () => void;
 };
 
+type YtWindow = Window & {
+  YT?: { Player: new (el: string, opts: object) => YtPlayer };
+  onYouTubeIframeAPIReady?: () => void;
+};
+
+function getYtWindow(): YtWindow {
+  return window as unknown as YtWindow;
+}
+
 function applyIntroVolume(player: YtPlayer) {
   player.unMute();
   player.setVolume(INTRO_VOLUME);
@@ -29,10 +38,7 @@ type GatePhase = "pick" | "spin" | "reveal" | "video" | "outro";
 
 function loadYouTubeApi(): Promise<void> {
   return new Promise((resolve) => {
-    const w = window as Window & {
-      YT?: { Player: new (el: string, opts: object) => YtPlayer };
-      onYouTubeIframeAPIReady?: () => void;
-    };
+    const w = getYtWindow();
 
     if (w.YT?.Player) {
       resolve();
@@ -86,11 +92,10 @@ export function WhoAreYouGate() {
       await loadYouTubeApi();
       if (cancelled || !document.getElementById(YT_HOST_ID)) return;
 
-      const w = window as Window & {
-        YT: { Player: new (el: string, opts: object) => YtPlayer };
-      };
+      const YT = getYtWindow().YT;
+      if (!YT?.Player) return;
 
-      playerRef.current = new w.YT.Player(YT_HOST_ID, {
+      playerRef.current = new YT.Player(YT_HOST_ID, {
         videoId: INTRO_VIDEO_ID,
         playerVars: {
           autoplay: 1,

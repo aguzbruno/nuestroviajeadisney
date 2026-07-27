@@ -213,34 +213,16 @@ export function AlbumStory({ cover, spreads }: Props) {
                     aria-hidden
                     className="absolute inset-0 translate-x-2 translate-y-3 rounded-r-md rounded-l-sm bg-black/20 blur-md"
                   />
-                  {/* Lomo de tela */}
-                  <div className="absolute inset-y-0 -left-2.5 w-3.5 rounded-l-sm overflow-hidden shadow-md">
-                    <div className="absolute inset-0 bg-gradient-to-r from-[#1a3a6b] via-[#2a5080] to-[#c4b396]" />
-                    <div className="absolute inset-y-3 left-1/2 w-px -translate-x-1/2 bg-[#f0e2b8]/35" />
+                  {/* Lomo colorido */}
+                  <div className="absolute inset-y-0 -left-2.5 w-3.5 rounded-l-2xl overflow-hidden shadow-md">
+                    <div className="absolute inset-0 bg-gradient-to-b from-[#1a5fb4] via-[#e31c23] to-[#f0c14b]" />
                   </div>
                   <div
                     aria-hidden
-                    className="absolute inset-y-2 -right-2 w-2 rounded-r-sm bg-gradient-to-b from-[#f7efdc] via-[#e8dcc4] to-[#d4c4a0] border border-[#c9b896]/40"
+                    className="absolute inset-y-3 -right-2 w-2 rounded-r-xl bg-gradient-to-b from-white via-[#fff4e8] to-[#ffe0e8] border border-[#ffd6e2]/60"
                   />
-                  <div className="relative h-full overflow-hidden rounded-r-md rounded-l-sm border border-[#c9a86c]/70 shadow-[0_25px_70px_rgba(60,40,10,0.28)] album-cover">
+                  <div className="relative h-full overflow-hidden rounded-2xl border-2 border-white shadow-[0_25px_70px_rgba(26,60,120,0.28)] ring-1 ring-[#7ec8e3]/40">
                     {cover}
-                    {/* Esquinas metálicas */}
-                    <span
-                      aria-hidden
-                      className="album-metal-corner absolute top-1.5 left-1.5 z-40 h-4 w-4 [clip-path:polygon(0_0,100%_0,100%_22%,22%_22%,22%_100%,0_100%)]"
-                    />
-                    <span
-                      aria-hidden
-                      className="album-metal-corner absolute top-1.5 right-1.5 z-40 h-4 w-4 [clip-path:polygon(0_0,100%_0,100%_100%,78%_100%,78%_22%,0_22%)]"
-                    />
-                    <span
-                      aria-hidden
-                      className="album-metal-corner absolute bottom-1.5 left-1.5 z-40 h-4 w-4 [clip-path:polygon(0_0,22%_0,22%_78%,100%_78%,100%_100%,0_100%)]"
-                    />
-                    <span
-                      aria-hidden
-                      className="album-metal-corner absolute bottom-1.5 right-1.5 z-40 h-4 w-4 [clip-path:polygon(78%_0,100%_0,100%_100%,0_100%,0_78%,78%_78%)]"
-                    />
                   </div>
                 </button>
               </motion.div>
@@ -453,7 +435,7 @@ function PageHalf({
           className="absolute inset-y-3 -right-[6px] w-[6px] rounded-r-sm bg-gradient-to-b from-[#f5ecd8] via-[#e8dcc4] to-[#d9c9a8] border border-[#c9b896]/50"
         />
       )}
-      <div className="h-full overflow-hidden p-5 xl:p-7 flex flex-col">
+      <div className="h-full overflow-hidden px-5 pt-6 pb-5 xl:px-7 xl:pt-7 xl:pb-7 flex flex-col">
         {children}
       </div>
     </div>
@@ -525,7 +507,7 @@ function TurningLeaf({
               : "linear-gradient(270deg, rgba(255,255,255,0.35), transparent 45%, rgba(0,0,0,0.12))",
           }}
         />
-        <div className="h-full overflow-hidden p-5 xl:p-7 flex flex-col">
+        <div className="h-full overflow-hidden px-5 pt-6 pb-5 xl:px-7 xl:pt-7 xl:pb-7 flex flex-col">
           {front}
         </div>
       </div>
@@ -552,7 +534,7 @@ function TurningLeaf({
               : `left-0 ${backDark ? "bg-gradient-to-r from-black/30 to-transparent" : "bg-gradient-to-r from-[#b8956a]/35 to-transparent"}`
           }`}
         />
-        <div className="h-full overflow-hidden p-5 xl:p-7 flex flex-col">
+        <div className="h-full overflow-hidden px-5 pt-6 pb-5 xl:px-7 xl:pt-7 xl:pb-7 flex flex-col">
           {back}
         </div>
       </div>

@@ -356,46 +356,49 @@ export function AlbumDayLeaf({
     : day.dateLabel;
 
   return (
-    <div className="album-leaf">
+    <div className="album-leaf overflow-visible">
       <span
         className="album-blob -right-8 -top-6 h-24 w-24"
         style={{ background: dark ? "#ff6b3533" : "#f0c14b33" }}
       />
 
       {image && (
-        <div
-          className={`album-polaroid relative z-[1] mx-auto w-[92%] shrink-0 ${
-            tiltAlt ? "album-polaroid-alt" : ""
-          }`}
-        >
-          <span
-            className={`album-washi -top-2 left-1/2 w-20 -translate-x-1/2 ${
-              dark ? "bg-[#ff6b35]/75" : "bg-[#7ec8e3]/8"
+        <div className="relative z-[1] mx-auto w-[92%] shrink-0 pt-4">
+          <div
+            className={`album-polaroid relative ${
+              tiltAlt ? "album-polaroid-alt" : ""
             }`}
-          />
-          <div className="relative h-[118px] overflow-hidden rounded-md xl:h-[132px]">
-            <Image
-              src={image}
-              alt={day.title}
-              fill
-              className="object-cover"
-              sizes="260px"
+          >
+            <span
+              className={`album-washi -top-2 left-1/2 w-20 -translate-x-1/2 ${
+                dark ? "bg-[#ff6b35]/75" : "bg-[#7ec8e3]/8"
+              }`}
             />
+            <div className="relative h-[118px] overflow-hidden rounded-md xl:h-[132px]">
+              <Image
+                src={image}
+                alt={day.title}
+                fill
+                className="object-cover"
+                sizes="260px"
+              />
+            </div>
+            <p className="mt-1.5 text-center font-display text-xs font-bold text-[#1a2a44]/8">
+              {dateLine}
+            </p>
           </div>
-          <div className="absolute -right-2 -top-2 flex h-10 w-10 items-center justify-center rounded-full bg-[#e31c23] font-display text-sm font-bold text-white shadow-md rotate-12">
-            {day.day}
+          {/* Badge fuera del overflow de la polaroid */}
+          <div className="absolute right-0 top-1 z-20 flex min-w-[3.4rem] items-center justify-center rounded-full bg-[#e31c23] px-2.5 py-1.5 font-display text-[0.7rem] font-bold leading-none text-white shadow-md rotate-12">
+            DÍA {day.day}
           </div>
-          <p className="mt-1.5 text-center font-display text-xs font-bold text-[#1a2a44]/55">
-            {dateLine}
-          </p>
         </div>
       )}
 
       <div className="relative z-[1] mt-3 flex min-h-0 flex-1 flex-col">
         {!image && (
           <div className="mb-1 flex items-center gap-2">
-            <span className="flex h-8 w-8 items-center justify-center rounded-full bg-[#e31c23] font-display text-sm font-bold text-white">
-              {day.day}
+            <span className="flex min-w-[3.4rem] items-center justify-center rounded-full bg-[#e31c23] px-2.5 py-1.5 font-display text-[0.7rem] font-bold text-white">
+              DÍA {day.day}
             </span>
             <span
               className={`text-xs font-semibold ${
