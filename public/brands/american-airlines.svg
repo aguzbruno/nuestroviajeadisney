@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 40" role="img" aria-label="American Airlines">
+  <rect width="200" height="40" rx="6" fill="#0078D2"/>
+  <path d="M18 28 L32 8 L38 8 L24 28 Z" fill="#fff"/>
+  <path d="M28 28 L42 8 L48 8 L34 28 Z" fill="#C60C30"/>
+  <text x="56" y="26" font-family="Arial, Helvetica, sans-serif" font-size="14" font-weight="700" fill="#fff">American Airlines</text>
+</svg>

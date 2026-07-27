@@ -1,0 +1,561 @@
+"use client";
+
+import {
+  useCallback,
+  useEffect,
+  useRef,
+  useState,
+  type ReactNode,
+} from "react";
+import { AnimatePresence, motion } from "framer-motion";
+import { ChevronLeft, ChevronRight } from "lucide-react";
+import {
+  PAGE_TURN_DURATION_S,
+  playPageTurnSound,
+} from "@/lib/pageTurnSound";
+import { BirthdayModal } from "@/components/BirthdayModal";
+
+export type AlbumSpread = {
+  id: string;
+  label: string;
+  left: ReactNode;
+  right: ReactNode;
+  /** Oscuro en ambas hojas (legacy). Preferí leftDark / rightDark. */
+  dark?: boolean;
+  leftDark?: boolean;
+  rightDark?: boolean;
+  /** Al aterrizar en este pliego, abrir modal de cumpleaños. */
+  celebrateBirthday?: boolean;
+};
+
+type Props = Readonly<{
+  cover: ReactNode;
+  spreads: AlbumSpread[];
+}>;
+
+type FlipState = {
+  from: number;
+  to: number;
+  dir: 1 | -1;
+};
+
+const FLIP_MS = Math.round(PAGE_TURN_DURATION_S * 1000);
+
+function sideDark(
+  spread: AlbumSpread,
+  side: "left" | "right",
+): boolean {
+  if (side === "left") return spread.leftDark ?? spread.dark ?? false;
+  return spread.rightDark ?? spread.dark ?? false;
+}
+
+export function AlbumStory({ cover, spreads }: Props) {
+  const [opened, setOpened] = useState(false);
+  const [index, setIndex] = useState(0);
+  const [flip, setFlip] = useState<FlipState | null>(null);
+  const [birthdayOpen, setBirthdayOpen] = useState(false);
+  const busy = useRef(false);
+  const indexRef = useRef(index);
+  const openedRef = useRef(opened);
+  const spreadsRef = useRef(spreads);
+  indexRef.current = index;
+  openedRef.current = opened;
+  spreadsRef.current = spreads;
+
+  const maybeCelebrate = useCallback((spreadIndex: number) => {
+    if (spreadsRef.current[spreadIndex]?.celebrateBirthday) {
+      setBirthdayOpen(true);
+    }
+  }, []);
+
+  const openBook = useCallback(() => {
+    if (openedRef.current || busy.current) return;
+    busy.current = true;
+    playPageTurnSound();
+    setOpened(true);
+    window.setTimeout(() => {
+      busy.current = false;
+      maybeCelebrate(0);
+    }, 900);
+  }, [maybeCelebrate]);
+
+  const closeBook = useCallback(() => {
+    if (!openedRef.current || busy.current) return;
+    busy.current = true;
+    playPageTurnSound();
+    setOpened(false);
+    setIndex(0);
+    setFlip(null);
+    setBirthdayOpen(false);
+    window.setTimeout(() => {
+      busy.current = false;
+    }, 900);
+  }, []);
+
+  const go = useCallback(
+    (dir: 1 | -1) => {
+      if (busy.current) return;
+
+      if (!openedRef.current) {
+        if (dir === 1) openBook();
+        return;
+      }
+
+      const from = indexRef.current;
+      const to = from + dir;
+      if (to < 0) {
+        closeBook();
+        return;
+      }
+      if (to >= spreads.length) return;
+
+      busy.current = true;
+      playPageTurnSound();
+      setFlip({ from, to, dir });
+      window.setTimeout(() => {
+        setIndex(to);
+        setFlip(null);
+        busy.current = false;
+        maybeCelebrate(to);
+      }, FLIP_MS);
+    },
+    [closeBook, openBook, maybeCelebrate, spreads.length],
+  );
+
+  const jumpTo = useCallback(
+    (to: number) => {
+      if (busy.current || to === indexRef.current) return;
+      const from = indexRef.current;
+      const dir = (to > from ? 1 : -1) as 1 | -1;
+      busy.current = true;
+      playPageTurnSound();
+      setFlip({ from, to, dir });
+      window.setTimeout(() => {
+        setIndex(to);
+        setFlip(null);
+        busy.current = false;
+        maybeCelebrate(to);
+      }, FLIP_MS);
+    },
+    [maybeCelebrate],
+  );
+
+  useEffect(() => {
+    function onKey(e: KeyboardEvent) {
+      if (e.key === "ArrowRight" || e.key === " ") {
+        e.preventDefault();
+        go(1);
+      } else if (e.key === "ArrowLeft") {
+        e.preventDefault();
+        go(-1);
+      }
+    }
+    window.addEventListener("keydown", onKey);
+    return () => window.removeEventListener("keydown", onKey);
+  }, [go]);
+
+  useEffect(() => {
+    const prevOverflow = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
+    document.body.dataset.albumMode = "true";
+    return () => {
+      document.body.style.overflow = prevOverflow;
+      delete document.body.dataset.albumMode;
+    };
+  }, []);
+
+  const canPrev = opened;
+  const canNext = !opened || index < spreads.length - 1;
+  const displayIndex = flip ? flip.from : index;
+
+  return (
+    <div className="relative flex flex-col h-full overflow-hidden album-desk">
+      <BirthdayModal
+        open={birthdayOpen}
+        onClose={() => setBirthdayOpen(false)}
+      />
+      <div className="flex-1 flex items-center justify-center gap-2 xl:gap-4 px-3 py-4 min-h-0">
+        <NavArrow
+          label="Anterior"
+          disabled={!canPrev || !!flip}
+          onClick={() => go(-1)}
+          side="left"
+        />
+
+        <div
+          className="relative w-full max-w-[1100px] h-full max-h-[min(640px,calc(100dvh-9.5rem))]"
+          style={{ perspective: "2800px" }}
+        >
+          <AnimatePresence mode="wait" initial={false}>
+            {!opened ? (
+              <motion.div
+                key="cover"
+                className="absolute inset-0 flex items-center justify-center"
+                initial={{ rotateY: -18, opacity: 0 }}
+                animate={{ rotateY: 0, opacity: 1 }}
+                exit={{
+                  rotateY: -105,
+                  opacity: 0.55,
+                  transition: { duration: 0.8, ease: [0.4, 0, 0.2, 1] },
+                }}
+                style={{
+                  transformOrigin: "left center",
+                  transformStyle: "preserve-3d",
+                }}
+              >
+                <button
+                  type="button"
+                  onClick={openBook}
+                  className="relative aspect-[3/4] h-full max-h-full w-auto max-w-[min(420px,46vw)] text-left group"
+                  aria-label="Abrir el álbum"
+                >
+                  <div
+                    aria-hidden
+                    className="absolute inset-0 translate-x-2 translate-y-3 rounded-r-md rounded-l-sm bg-black/20 blur-md"
+                  />
+                  {/* Lomo de tela */}
+                  <div className="absolute inset-y-0 -left-2.5 w-3.5 rounded-l-sm overflow-hidden shadow-md">
+                    <div className="absolute inset-0 bg-gradient-to-r from-[#1a3a6b] via-[#2a5080] to-[#c4b396]" />
+                    <div className="absolute inset-y-3 left-1/2 w-px -translate-x-1/2 bg-[#f0e2b8]/35" />
+                  </div>
+                  <div
+                    aria-hidden
+                    className="absolute inset-y-2 -right-2 w-2 rounded-r-sm bg-gradient-to-b from-[#f7efdc] via-[#e8dcc4] to-[#d4c4a0] border border-[#c9b896]/40"
+                  />
+                  <div className="relative h-full overflow-hidden rounded-r-md rounded-l-sm border border-[#c9a86c]/70 shadow-[0_25px_70px_rgba(60,40,10,0.28)] album-cover">
+                    {cover}
+                    {/* Esquinas metálicas */}
+                    <span
+                      aria-hidden
+                      className="album-metal-corner absolute top-1.5 left-1.5 z-40 h-4 w-4 [clip-path:polygon(0_0,100%_0,100%_22%,22%_22%,22%_100%,0_100%)]"
+                    />
+                    <span
+                      aria-hidden
+                      className="album-metal-corner absolute top-1.5 right-1.5 z-40 h-4 w-4 [clip-path:polygon(0_0,100%_0,100%_100%,78%_100%,78%_22%,0_22%)]"
+                    />
+                    <span
+                      aria-hidden
+                      className="album-metal-corner absolute bottom-1.5 left-1.5 z-40 h-4 w-4 [clip-path:polygon(0_0,22%_0,22%_78%,100%_78%,100%_100%,0_100%)]"
+                    />
+                    <span
+                      aria-hidden
+                      className="album-metal-corner absolute bottom-1.5 right-1.5 z-40 h-4 w-4 [clip-path:polygon(78%_0,100%_0,100%_100%,0_100%,0_78%,78%_78%)]"
+                    />
+                  </div>
+                </button>
+              </motion.div>
+            ) : (
+              <motion.div
+                key="open-book"
+                className="absolute inset-0"
+                initial={{ opacity: 0, scale: 0.97 }}
+                animate={{ opacity: 1, scale: 1 }}
+                exit={{ opacity: 0, scale: 0.98 }}
+                transition={{ duration: 0.35 }}
+              >
+                <div
+                  aria-hidden
+                  className="absolute inset-x-8 bottom-0 h-7 bg-black/20 blur-xl rounded-full"
+                />
+                <div className="relative h-full album-book-shell">
+                  <div
+                    aria-hidden
+                    className="absolute -left-1 inset-y-2 w-3 rounded-l-md bg-gradient-to-r from-[#2a1a0c] to-[#6b4423]"
+                  />
+                  <FlipBook
+                    spreads={spreads}
+                    index={displayIndex}
+                    flip={flip}
+                  />
+                </div>
+              </motion.div>
+            )}
+          </AnimatePresence>
+        </div>
+
+        <NavArrow
+          label="Siguiente"
+          disabled={!canNext || !!flip}
+          onClick={() => go(1)}
+          side="right"
+        />
+      </div>
+
+      <div className="shrink-0 pb-3 px-4 flex flex-col items-center gap-2">
+        <p className="font-display text-xs uppercase tracking-[0.14em] text-[#1a2a44]/45 font-bold">
+          {!opened
+            ? "Portada · álbum cerrado"
+            : `Pliego ${(flip ? flip.to : index) + 1} / ${spreads.length}`}
+        </p>
+        {opened && (
+          <div className="flex flex-wrap justify-center gap-1.5 max-w-4xl max-h-14 overflow-hidden">
+            {spreads.map((s, i) => (
+              <button
+                key={s.id}
+                type="button"
+                disabled={!!flip}
+                onClick={() => jumpTo(i)}
+                className={`font-display text-[11px] font-bold px-3 py-1 rounded-full transition ${
+                  i === (flip ? flip.to : index)
+                    ? "bg-[#1a5fb4] text-white shadow-md scale-105"
+                    : "bg-white/80 text-[#1a2a44]/55 hover:bg-white hover:text-[#1a5fb4]"
+                }`}
+              >
+                {s.label}
+              </button>
+            ))}
+          </div>
+        )}
+        <p className="text-[11px] text-[#1a2a44]/4">
+          {!opened
+            ? "Abrí el álbum para ver el viaje a doble página"
+            : "Pasá las hojas con las flechas o el teclado"}
+        </p>
+      </div>
+    </div>
+  );
+}
+
+function NavArrow({
+  label,
+  disabled,
+  onClick,
+  side,
+}: {
+  label: string;
+  disabled: boolean;
+  onClick: () => void;
+  side: "left" | "right";
+}) {
+  const Icon = side === "left" ? ChevronLeft : ChevronRight;
+  return (
+    <button
+      type="button"
+      aria-label={label}
+      disabled={disabled}
+      onClick={onClick}
+      className="shrink-0 w-11 h-11 xl:w-14 xl:h-14 rounded-full bg-white/95 border-2 border-[#7ec8e3]/50 shadow-lg flex items-center justify-center text-[#1a5fb4] transition enabled:hover:scale-110 enabled:hover:bg-white disabled:opacity-20 disabled:cursor-not-allowed"
+    >
+      <Icon className="w-7 h-7" strokeWidth={2.25} />
+    </button>
+  );
+}
+
+function FlipBook({
+  spreads,
+  index,
+  flip,
+}: {
+  spreads: AlbumSpread[];
+  index: number;
+  flip: FlipState | null;
+}) {
+  const current = spreads[index];
+  const incoming = flip ? spreads[flip.to] : null;
+  const outgoing = flip ? spreads[flip.from] : current;
+
+  // Cada mitad conserva el tema de la hoja que muestra (evita página negra tapando texto).
+  const baseLeft = flip
+    ? flip.dir === 1
+      ? outgoing.left
+      : incoming!.left
+    : current.left;
+  const baseRight = flip
+    ? flip.dir === 1
+      ? incoming!.right
+      : outgoing.right
+    : current.right;
+  const baseLeftDark = flip
+    ? flip.dir === 1
+      ? sideDark(outgoing, "left")
+      : sideDark(incoming!, "left")
+    : sideDark(current, "left");
+  const baseRightDark = flip
+    ? flip.dir === 1
+      ? sideDark(incoming!, "right")
+      : sideDark(outgoing, "right")
+    : sideDark(current, "right");
+
+  return (
+    <div
+      className="absolute inset-0 rounded-sm shadow-[0_20px_60px_rgba(26,60,120,0.3)] border border-[#c4b090]"
+      style={{ transformStyle: "preserve-3d", overflow: "visible" }}
+    >
+      {/* Marco de hojas base (recorta el contenido plano) */}
+      <div className="absolute inset-0 rounded-sm overflow-hidden">
+        <PageHalf side="left" dark={baseLeftDark}>
+          {baseLeft}
+        </PageHalf>
+        <PageHalf side="right" dark={baseRightDark} stackedEdge>
+          {baseRight}
+        </PageHalf>
+      </div>
+
+      <div
+        aria-hidden
+        className="absolute left-1/2 top-0 bottom-0 w-[3px] -translate-x-1/2 z-30 pointer-events-none"
+        style={{
+          background:
+            "linear-gradient(90deg, rgba(0,0,0,0.22), rgba(255,255,255,0.3), rgba(0,0,0,0.22))",
+        }}
+      />
+
+      {flip && flip.dir === 1 && (
+        <TurningLeaf
+          dir={1}
+          dark={sideDark(outgoing, "right")}
+          front={outgoing.right}
+          back={incoming!.left}
+          backDark={sideDark(incoming!, "left")}
+        />
+      )}
+      {flip && flip.dir === -1 && (
+        <TurningLeaf
+          dir={-1}
+          dark={sideDark(outgoing, "left")}
+          front={outgoing.left}
+          back={incoming!.right}
+          backDark={sideDark(incoming!, "right")}
+        />
+      )}
+    </div>
+  );
+}
+
+function PageHalf({
+  side,
+  dark,
+  stackedEdge,
+  children,
+}: {
+  side: "left" | "right";
+  dark?: boolean;
+  stackedEdge?: boolean;
+  children: ReactNode;
+}) {
+  return (
+    <div
+      className={`absolute top-0 bottom-0 w-1/2 overflow-hidden ${
+        side === "left" ? "left-0 border-r border-[#c9b896]/80" : "right-0"
+      } ${dark ? "album-page-dark" : "album-page-light"}`}
+    >
+      <div
+        aria-hidden
+        className={`absolute inset-y-0 w-10 pointer-events-none z-10 ${
+          side === "left"
+            ? `right-0 ${dark ? "bg-gradient-to-l from-black/35 to-transparent" : "bg-gradient-to-l from-[#b8956a]/40 to-transparent"}`
+            : `left-0 ${dark ? "bg-gradient-to-r from-black/35 to-transparent" : "bg-gradient-to-r from-[#b8956a]/40 to-transparent"}`
+        }`}
+      />
+      {stackedEdge && (
+        <div
+          aria-hidden
+          className="absolute inset-y-3 -right-[6px] w-[6px] rounded-r-sm bg-gradient-to-b from-[#f5ecd8] via-[#e8dcc4] to-[#d9c9a8] border border-[#c9b896]/50"
+        />
+      )}
+      <div className="h-full overflow-hidden p-5 xl:p-7 flex flex-col">
+        {children}
+      </div>
+    </div>
+  );
+}
+
+function TurningLeaf({
+  dir,
+  dark,
+  front,
+  back,
+  backDark,
+}: {
+  dir: 1 | -1;
+  dark?: boolean;
+  front: ReactNode;
+  back: ReactNode;
+  backDark?: boolean;
+}) {
+  const isForward = dir === 1;
+
+  return (
+    <motion.div
+      className={`absolute top-0 bottom-0 w-1/2 z-40 ${
+        isForward ? "right-0" : "left-0"
+      }`}
+      style={{
+        transformOrigin: isForward ? "left center" : "right center",
+        transformStyle: "preserve-3d",
+      }}
+      initial={{ rotateY: 0 }}
+      animate={{ rotateY: isForward ? -180 : 180 }}
+      transition={{
+        duration: PAGE_TURN_DURATION_S,
+        ease: [0.45, 0.05, 0.25, 1],
+      }}
+    >
+      {/* Cara frontal */}
+      <div
+        className={`absolute inset-0 overflow-hidden ${
+          dark ? "album-page-dark" : "album-page-light"
+        }`}
+        style={{
+          backfaceVisibility: "hidden",
+          WebkitBackfaceVisibility: "hidden",
+          boxShadow: isForward
+            ? "-12px 0 28px rgba(0,0,0,0.28)"
+            : "12px 0 28px rgba(0,0,0,0.28)",
+        }}
+      >
+        <div
+          aria-hidden
+          className={`absolute inset-y-0 w-12 pointer-events-none z-10 ${
+            isForward
+              ? `left-0 ${dark ? "bg-gradient-to-r from-black/30 to-transparent" : "bg-gradient-to-r from-[#b8956a]/35 to-transparent"}`
+              : `right-0 ${dark ? "bg-gradient-to-l from-black/30 to-transparent" : "bg-gradient-to-l from-[#b8956a]/35 to-transparent"}`
+          }`}
+        />
+        {/* Brillo que cruza al girar */}
+        <motion.div
+          aria-hidden
+          className="absolute inset-0 z-20 pointer-events-none"
+          initial={{ opacity: 0.15 }}
+          animate={{ opacity: [0.1, 0.35, 0.05] }}
+          transition={{ duration: PAGE_TURN_DURATION_S }}
+          style={{
+            background: isForward
+              ? "linear-gradient(90deg, rgba(255,255,255,0.35), transparent 45%, rgba(0,0,0,0.12))"
+              : "linear-gradient(270deg, rgba(255,255,255,0.35), transparent 45%, rgba(0,0,0,0.12))",
+          }}
+        />
+        <div className="h-full overflow-hidden p-5 xl:p-7 flex flex-col">
+          {front}
+        </div>
+      </div>
+
+      {/* Cara trasera (contenido de la hoja que aterriza) */}
+      <div
+        className={`absolute inset-0 overflow-hidden ${
+          backDark ? "album-page-dark" : "album-page-light"
+        }`}
+        style={{
+          backfaceVisibility: "hidden",
+          WebkitBackfaceVisibility: "hidden",
+          transform: "rotateY(180deg)",
+          boxShadow: isForward
+            ? "12px 0 28px rgba(0,0,0,0.25)"
+            : "-12px 0 28px rgba(0,0,0,0.25)",
+        }}
+      >
+        <div
+          aria-hidden
+          className={`absolute inset-y-0 w-12 pointer-events-none z-10 ${
+            isForward
+              ? `right-0 ${backDark ? "bg-gradient-to-l from-black/30 to-transparent" : "bg-gradient-to-l from-[#b8956a]/35 to-transparent"}`
+              : `left-0 ${backDark ? "bg-gradient-to-r from-black/30 to-transparent" : "bg-gradient-to-r from-[#b8956a]/35 to-transparent"}`
+          }`}
+        />
+        <div className="h-full overflow-hidden p-5 xl:p-7 flex flex-col">
+          {back}
+        </div>
+      </div>
+    </motion.div>
+  );
+}
