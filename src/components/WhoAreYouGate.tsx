@@ -5,7 +5,10 @@ import { useEffect, useRef, useState } from "react";
 import { travelers } from "@/data/travelers";
 import { useVisitor } from "@/components/VisitorProvider";
 import { Logo } from "@/components/Logo";
-import { Sparkles } from "lucide-react";
+import {
+  playCharacterFoundSound,
+  playCharacterSearchSound,
+} from "@/lib/characterRevealSound";
 
 const INTRO_VIDEO_ID = "dqvF85T4vCg";
 const INTRO_VOLUME = 50;
@@ -112,14 +115,11 @@ export function WhoAreYouGate() {
           onReady: (event: { target: YtPlayer }) => {
             applyIntroVolume(event.target);
             event.target.playVideo();
-            // Reaplicar por si YouTube resetea el volumen al iniciar
             window.setTimeout(() => applyIntroVolume(event.target), 200);
             window.setTimeout(() => applyIntroVolume(event.target), 800);
           },
           onStateChange: (event: { data: number; target: YtPlayer }) => {
-            // 1 = playing
             if (event.data === 1) applyIntroVolume(event.target);
-            // 0 = ended
             if (event.data === 0) finishIntro();
           },
           onError: () => finishIntro(),
@@ -138,7 +138,6 @@ export function WhoAreYouGate() {
       }
       playerRef.current = null;
     };
-    // finishIntro uses refs; only remount when entering video phase
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [phase]);
 
@@ -157,7 +156,11 @@ export function WhoAreYouGate() {
   function pick(id: string) {
     setSelected(id);
     setPhase("spin");
-    setTimeout(() => setPhase("reveal"), 1400);
+    playCharacterSearchSound();
+    setTimeout(() => {
+      playCharacterFoundSound();
+      setPhase("reveal");
+    }, 1400);
   }
 
   function confirm() {
@@ -186,7 +189,7 @@ export function WhoAreYouGate() {
         <button
           type="button"
           onClick={finishIntro}
-          className="absolute bottom-8 right-6 z-10 rounded-full bg-white/15 px-5 py-2.5 font-display text-sm font-semibold text-white backdrop-blur-sm transition hover:bg-white/25"
+          className="absolute bottom-8 right-6 z-10 rounded-full bg-white/90 px-5 py-2.5 font-display text-sm font-bold text-[#1a5fb4] shadow-lg transition hover:scale-105"
         >
           Saltar intro
         </button>
@@ -195,36 +198,48 @@ export function WhoAreYouGate() {
   }
 
   return (
-    <div className="fixed inset-0 z-[100] castle-bg flex items-center justify-center p-4 overflow-y-auto">
-      <div className="absolute inset-0 overflow-hidden pointer-events-none">
-        {[...Array(12)].map((_, i) => (
-          <motion.span
-            key={i}
-            className="absolute text-2xl opacity-40"
-            style={{ left: `${(i * 8) % 100}%`, top: `${(i * 13) % 80}%` }}
-            animate={{ y: [0, -20, 0], rotate: [0, 10, -10, 0] }}
-            transition={{ duration: 3 + i * 0.2, repeat: Infinity }}
-          >
-            {i % 2 === 0 ? "✨" : "⭐"}
-          </motion.span>
-        ))}
-      </div>
+    <div className="fixed inset-0 z-[100] overflow-y-auto bg-gradient-to-b from-[#fff9ef] via-[#fff4e8] to-[#ffeef5]">
+      <span className="album-blob pointer-events-none fixed -left-16 -top-10 h-56 w-56 bg-[#7ec8e3]/4" />
+      <span className="album-blob pointer-events-none fixed -right-12 top-24 h-44 w-44 bg-[#f0c14b]/35" />
+      <span className="album-blob pointer-events-none fixed bottom-10 left-1/4 h-36 w-40 bg-[#ff8fab]/3" />
 
-      <div className="relative w-full max-w-2xl">
-        <div className="text-center text-white mb-8">
-          <Logo size={72} className="mx-auto mb-5 rounded-2xl shadow-lg" />
+      <div className="relative mx-auto flex min-h-full w-full max-w-2xl flex-col justify-center px-4 py-10">
+        <div className="mb-7 text-center">
+          <Logo size={68} className="mx-auto mb-4 rounded-2xl shadow-lg ring-2 ring-white" />
+
+          {/* Badge estilo álbum (reemplaza la pill genérica) */}
           <motion.div
-            initial={{ scale: 0.9, opacity: 0 }}
-            animate={{ scale: 1, opacity: 1 }}
+            initial={{ scale: 0.9, opacity: 0, rotate: -2 }}
+            animate={{ scale: 1, opacity: 1, rotate: -2 }}
+            className="relative mx-auto mb-5 inline-block"
           >
-            <div className="inline-flex items-center gap-2 bg-white/15 px-4 py-1.5 rounded-full text-sm mb-4">
-              <Sparkles className="w-4 h-4 text-gold" />
-              Viaje mágico 2026
+            <div className="relative rounded-2xl bg-white px-5 py-2.5 shadow-[0_10px_28px_rgba(26,60,120,0.12)]">
+              <span className="album-washi -top-2 left-4 w-12 bg-[#f0c14b]/85 -rotate-6" />
+              <span className="album-washi -top-1.5 right-5 w-10 bg-[#7ec8e3]/85 rotate-8" />
+              <div className="flex items-center gap-2">
+                <span className="flex h-8 w-8 items-center justify-center rounded-full bg-[#1a5fb4] text-sm shadow-sm">
+                  🪄
+                </span>
+                <div className="text-left">
+                  <p className="font-display text-[0.65rem] font-bold uppercase tracking-wider text-[#1a5fb4]">
+                    Álbum familiar
+                  </p>
+                  <p className="font-display text-sm font-bold leading-none text-[#1a2a44]">
+                    Viaje mágico 2026
+                  </p>
+                </div>
+              </div>
             </div>
-            <h1 className="font-display text-4xl md:text-5xl font-bold drop-shadow-lg">
+          </motion.div>
+
+          <motion.div
+            initial={{ opacity: 0, y: 10 }}
+            animate={{ opacity: 1, y: 0 }}
+          >
+            <h1 className="font-display text-4xl font-bold text-[#1a2a44] md:text-5xl">
               ¿Quién viaja hoy?
             </h1>
-            <p className="mt-3 text-sky/90 text-lg">
+            <p className="mt-2 text-base text-[#1a2a44]/65 md:text-lg">
               Tocá tu nombre y descubrí tu personaje Disney
             </p>
           </motion.div>
@@ -234,33 +249,38 @@ export function WhoAreYouGate() {
           {phase === "pick" && (
             <motion.div
               key="pick"
-              exit={{ opacity: 0, scale: 0.95 }}
-              className="grid grid-cols-1 sm:grid-cols-2 gap-3"
+              exit={{ opacity: 0, scale: 0.96 }}
+              className="grid grid-cols-1 gap-3 sm:grid-cols-2"
             >
               {travelers.map((t, i) => (
                 <motion.button
                   key={t.id}
                   type="button"
-                  initial={{ opacity: 0, y: 20 }}
+                  initial={{ opacity: 0, y: 18 }}
                   animate={{ opacity: 1, y: 0 }}
-                  transition={{ delay: i * 0.08 }}
-                  whileHover={{ scale: 1.03, y: -2 }}
+                  transition={{ delay: i * 0.07 }}
+                  whileHover={{ scale: 1.03, y: -3 }}
                   whileTap={{ scale: 0.98 }}
                   onClick={() => pick(t.id)}
-                  className="card-magic rounded-2xl p-4 text-left flex items-center gap-4 cursor-pointer"
+                  className={`album-sticker relative flex items-center gap-3 p-3.5 text-left ${
+                    i % 2 === 0 ? "-rotate-1" : "rotate-1"
+                  }`}
                 >
                   <span
-                    className="w-14 h-14 rounded-full flex items-center justify-center text-2xl shrink-0"
-                    style={{ background: `${t.color}22`, border: `2px solid ${t.color}` }}
+                    className="flex h-14 w-14 shrink-0 items-center justify-center rounded-2xl text-2xl font-display font-bold text-white shadow-md"
+                    style={{ background: t.color }}
                   >
                     {t.shortName[0]}
                   </span>
-                  <div>
-                    <div className="font-display font-semibold text-lg text-ink">
+                  <div className="min-w-0">
+                    <div className="truncate font-display text-lg font-bold text-[#1a2a44]">
                       {t.name}
                     </div>
-                    <div className="text-sm text-ink/60">{t.age} años</div>
+                    <div className="text-sm font-semibold text-[#1a2a44]/75">
+                      {t.age} años
+                    </div>
                   </div>
+                  <span className="ml-auto text-xl opacity-40">→</span>
                 </motion.button>
               ))}
             </motion.div>
@@ -269,20 +289,25 @@ export function WhoAreYouGate() {
           {phase === "spin" && (
             <motion.div
               key="spin"
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
+              initial={{ opacity: 0, scale: 0.92 }}
+              animate={{ opacity: 1, scale: 1 }}
               exit={{ opacity: 0 }}
-              className="card-magic rounded-3xl p-12 text-center"
+              className="relative mx-auto max-w-md rounded-[1.75rem] bg-white p-10 text-center shadow-[0_16px_40px_rgba(26,60,120,0.14)]"
             >
+              <span className="album-washi -top-2 left-8 w-16 bg-[#ff8fab]/8 -rotate-4" />
+              <span className="album-washi -top-1.5 right-10 w-12 bg-[#f0c14b]/85 rotate-6" />
               <motion.div
-                animate={{ rotate: 360 }}
+                animate={{ rotate: [0, -20, 20, -10, 10, 0], scale: [1, 1.1, 1] }}
                 transition={{ duration: 1.2, ease: "easeInOut" }}
-                className="text-6xl mx-auto mb-4"
+                className="mx-auto mb-4 flex h-20 w-20 items-center justify-center rounded-full bg-[#1a5fb4] text-4xl shadow-lg"
               >
                 🪄
               </motion.div>
-              <p className="font-display text-2xl text-ink">
-                Bibbidi bobbidi… ¡revelando!
+              <p className="font-display text-2xl font-bold text-[#1a2a44]">
+                Bibbidi bobbidi…
+              </p>
+              <p className="mt-1 font-display text-lg text-[#1a5fb4]">
+                ¡Revelando tu personaje!
               </p>
             </motion.div>
           )}
@@ -290,51 +315,70 @@ export function WhoAreYouGate() {
           {phase === "reveal" && traveler && (
             <motion.div
               key="reveal"
-              initial={{ opacity: 0, scale: 0.8 }}
-              animate={{ opacity: 1, scale: 1 }}
-              className="card-magic rounded-3xl p-8 text-center relative overflow-hidden"
+              initial={{ opacity: 0, scale: 0.86, rotate: -2 }}
+              animate={{ opacity: 1, scale: 1, rotate: 0 }}
+              className="relative mx-auto max-w-md"
             >
               {traveler.birthdayMode && (
-                <div className="absolute inset-0 pointer-events-none">
-                  {[...Array(20)].map((_, i) => (
+                <div className="pointer-events-none absolute inset-0 z-10 overflow-hidden rounded-[1.75rem]">
+                  {[...Array(16)].map((_, i) => (
                     <motion.span
                       key={i}
                       className="absolute text-xl"
-                      initial={{ y: -20, x: `${(i * 5) % 100}%`, opacity: 1 }}
-                      animate={{ y: 400, opacity: 0 }}
-                      transition={{ duration: 2 + (i % 5) * 0.3, repeat: Infinity }}
+                      initial={{ y: -20, x: `${(i * 6) % 100}%`, opacity: 1 }}
+                      animate={{ y: 420, opacity: 0 }}
+                      transition={{
+                        duration: 2 + (i % 5) * 0.3,
+                        repeat: Infinity,
+                      }}
                     >
                       {i % 3 === 0 ? "🎉" : i % 3 === 1 ? "✨" : "🎂"}
                     </motion.span>
                   ))}
                 </div>
               )}
-              <div className="text-6xl mb-3">{traveler.characterEmoji}</div>
-              <p className="text-sm uppercase tracking-widest text-ink/50 mb-1">
-                Tu personaje es
-              </p>
-              <h2
-                className="font-display text-3xl md:text-4xl font-bold mb-2"
-                style={{ color: traveler.color }}
-              >
-                {traveler.character}
-              </h2>
-              <p className="text-ink/80 text-lg mb-2">{traveler.shortName}</p>
-              <p className="text-ink/70 max-w-md mx-auto mb-6">
-                {traveler.birthdayMessage ?? traveler.greeting}
-              </p>
-              {traveler.birthdayMode && (
-                <div className="mb-6 inline-block bg-gold/30 border border-gold rounded-full px-4 py-2 font-display font-semibold text-ink">
-                  Festejamos tus 60 el 04/10 ✨
+
+              <div className="relative rounded-[1.75rem] bg-white p-7 text-center shadow-[0_16px_40px_rgba(26,60,120,0.14)]">
+                <span className="album-washi -top-2 left-8 w-16 bg-[#7ec8e3]/85 -rotate-5" />
+                <span className="album-washi -top-1.5 right-10 w-12 bg-[#f0c14b]/85 rotate-7" />
+
+                <div
+                  className="mx-auto mb-3 flex h-20 w-20 items-center justify-center rounded-[1.4rem] text-4xl shadow-md -rotate-3"
+                  style={{ background: `${traveler.color}22`, border: `3px solid ${traveler.color}` }}
+                >
+                  {traveler.characterEmoji}
                 </div>
-              )}
-              <button
-                type="button"
-                onClick={confirm}
-                className="bg-mickey text-white font-display font-semibold px-8 py-3 rounded-full shadow-lg hover:scale-105 transition"
-              >
-                ¡Empezar la aventura!
-              </button>
+
+                <p className="font-display text-[0.7rem] font-bold uppercase tracking-[0.18em] text-[#1a5fb4]">
+                  Tu personaje es
+                </p>
+                <h2
+                  className="font-display mt-1 text-3xl font-bold md:text-4xl"
+                  style={{ color: traveler.color }}
+                >
+                  {traveler.character}
+                </h2>
+                <p className="mt-1 font-display text-lg font-bold text-[#1a2a44]">
+                  {traveler.shortName}
+                </p>
+                <p className="mx-auto mt-3 max-w-sm text-[#1a2a44]/65">
+                  {traveler.birthdayMessage ?? traveler.greeting}
+                </p>
+
+                {traveler.birthdayMode && (
+                  <div className="mt-4 inline-flex rounded-full bg-[#fff1c9] px-4 py-2 font-display text-sm font-bold text-[#8a6a10]">
+                    Festejamos tus 60 el 04/10 ✨
+                  </div>
+                )}
+
+                <button
+                  type="button"
+                  onClick={confirm}
+                  className="album-cta mx-auto mt-6"
+                >
+                  ¡Empezar la aventura!
+                </button>
+              </div>
             </motion.div>
           )}
         </AnimatePresence>

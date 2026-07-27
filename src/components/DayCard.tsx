@@ -177,6 +177,23 @@ export function DayCard({
               Abrir portal HHN →
             </Link>
           </div>
+        ) : isBirthday ? (
+          <div className="mt-4 flex flex-wrap gap-2">
+            <Link
+              href="/disney#cena"
+              className="inline-flex items-center font-display font-semibold text-sm rounded-full bg-mickey text-white px-4 py-2"
+            >
+              Elegir dónde cenamos 🎂
+            </Link>
+            {day.parkId && (
+              <Link
+                href={`/disney/${day.parkId}`}
+                className="inline-flex items-center text-sm font-display font-semibold text-mk-blue px-2 py-2"
+              >
+                Animal Kingdom →
+              </Link>
+            )}
+          </div>
         ) : day.day === 7 || (day.theme === "shopping" && day.day === 11) ? (
           <Link
             href="/shopping#centros"

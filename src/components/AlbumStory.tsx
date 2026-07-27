@@ -14,6 +14,11 @@ import {
   playPageTurnSound,
 } from "@/lib/pageTurnSound";
 import { BirthdayModal } from "@/components/BirthdayModal";
+import { AlbumSpreadProvider } from "@/components/AlbumSpreadContext";
+import {
+  ALBUM_SPREAD_PARAM,
+  parseAlbumSpreadParam,
+} from "@/lib/albumNav";
 
 export type AlbumSpread = {
   id: string;
@@ -54,6 +59,7 @@ export function AlbumStory({ cover, spreads }: Props) {
   const [index, setIndex] = useState(0);
   const [flip, setFlip] = useState<FlipState | null>(null);
   const [birthdayOpen, setBirthdayOpen] = useState(false);
+  const [restored, setRestored] = useState(false);
   const busy = useRef(false);
   const indexRef = useRef(index);
   const openedRef = useRef(opened);
@@ -67,6 +73,36 @@ export function AlbumStory({ cover, spreads }: Props) {
       setBirthdayOpen(true);
     }
   }, []);
+
+  // Restaurar pliego desde `?pliego=` (vuelta desde un CTA del álbum).
+  useEffect(() => {
+    if (restored) return;
+    const params = new URLSearchParams(window.location.search);
+    const target = parseAlbumSpreadParam(params);
+    setRestored(true);
+    if (target == null) return;
+    const clamped = Math.min(target, Math.max(spreadsRef.current.length - 1, 0));
+    setOpened(true);
+    setIndex(clamped);
+    busy.current = false;
+    window.setTimeout(() => maybeCelebrate(clamped), 400);
+  }, [restored, maybeCelebrate]);
+
+  // Sync del pliego en la URL mientras el álbum está abierto.
+  useEffect(() => {
+    if (!restored) return;
+    const url = new URL(window.location.href);
+    if (!opened) {
+      url.searchParams.delete(ALBUM_SPREAD_PARAM);
+    } else {
+      url.searchParams.set(ALBUM_SPREAD_PARAM, String(index));
+    }
+    const next = `${url.pathname}${url.search}${url.hash}`;
+    const current = `${window.location.pathname}${window.location.search}${window.location.hash}`;
+    if (next !== current) {
+      window.history.replaceState(null, "", next);
+    }
+  }, [opened, index, restored]);
 
   const openBook = useCallback(() => {
     if (openedRef.current || busy.current) return;
@@ -122,24 +158,6 @@ export function AlbumStory({ cover, spreads }: Props) {
     [closeBook, openBook, maybeCelebrate, spreads.length],
   );
 
-  const jumpTo = useCallback(
-    (to: number) => {
-      if (busy.current || to === indexRef.current) return;
-      const from = indexRef.current;
-      const dir = (to > from ? 1 : -1) as 1 | -1;
-      busy.current = true;
-      playPageTurnSound();
-      setFlip({ from, to, dir });
-      window.setTimeout(() => {
-        setIndex(to);
-        setFlip(null);
-        busy.current = false;
-        maybeCelebrate(to);
-      }, FLIP_MS);
-    },
-    [maybeCelebrate],
-  );
-
   useEffect(() => {
     function onKey(e: KeyboardEvent) {
       if (e.key === "ArrowRight" || e.key === " ") {
@@ -168,133 +186,105 @@ export function AlbumStory({ cover, spreads }: Props) {
   const canNext = !opened || index < spreads.length - 1;
   const displayIndex = flip ? flip.from : index;
 
-  return (
-    <div className="relative flex flex-col h-full overflow-hidden album-desk">
-      <BirthdayModal
-        open={birthdayOpen}
-        onClose={() => setBirthdayOpen(false)}
-      />
-      <div className="flex-1 flex items-center justify-center gap-2 xl:gap-4 px-3 py-4 min-h-0">
-        <NavArrow
-          label="Anterior"
-          disabled={!canPrev || !!flip}
-          onClick={() => go(-1)}
-          side="left"
-        />
+  const activePliego = flip ? flip.to : index;
 
-        <div
-          className="relative w-full max-w-[1100px] h-full max-h-[min(640px,calc(100dvh-9.5rem))]"
-          style={{ perspective: "2800px" }}
-        >
-          <AnimatePresence mode="wait" initial={false}>
-            {!opened ? (
-              <motion.div
-                key="cover"
-                className="absolute inset-0 flex items-center justify-center"
-                initial={{ rotateY: -18, opacity: 0 }}
-                animate={{ rotateY: 0, opacity: 1 }}
-                exit={{
-                  rotateY: -105,
-                  opacity: 0.55,
-                  transition: { duration: 0.8, ease: [0.4, 0, 0.2, 1] },
-                }}
-                style={{
-                  transformOrigin: "left center",
-                  transformStyle: "preserve-3d",
-                }}
-              >
-                <button
-                  type="button"
-                  onClick={openBook}
-                  className="relative aspect-[3/4] h-full max-h-full w-auto max-w-[min(420px,46vw)] text-left group"
-                  aria-label="Abrir el álbum"
+  return (
+    <AlbumSpreadProvider pliego={activePliego}>
+      <div className="relative flex flex-col h-full overflow-hidden album-desk">
+        <BirthdayModal
+          open={birthdayOpen}
+          onClose={() => setBirthdayOpen(false)}
+        />
+        <div className="flex-1 flex items-center justify-center gap-2 xl:gap-4 px-3 py-2 min-h-0">
+          <NavArrow
+            label="Anterior"
+            disabled={!canPrev || !!flip}
+            onClick={() => go(-1)}
+            side="left"
+          />
+
+          <div
+            className="relative w-full max-w-[1100px] h-full max-h-[min(720px,calc(100dvh-5.5rem))]"
+            style={{ perspective: "2800px" }}
+          >
+            <AnimatePresence mode="wait" initial={false}>
+              {!opened ? (
+                <motion.div
+                  key="cover"
+                  className="absolute inset-0 flex items-center justify-center"
+                  initial={{ rotateY: -18, opacity: 0 }}
+                  animate={{ rotateY: 0, opacity: 1 }}
+                  exit={{
+                    rotateY: -105,
+                    opacity: 0.55,
+                    transition: { duration: 0.8, ease: [0.4, 0, 0.2, 1] },
+                  }}
+                  style={{
+                    transformOrigin: "left center",
+                    transformStyle: "preserve-3d",
+                  }}
+                >
+                  <button
+                    type="button"
+                    onClick={openBook}
+                    className="relative aspect-[3/4] h-full max-h-full w-auto max-w-[min(420px,46vw)] text-left group"
+                    aria-label="Abrir el álbum"
+                  >
+                    <div
+                      aria-hidden
+                      className="absolute inset-0 translate-x-2 translate-y-3 rounded-r-md rounded-l-sm bg-black/20 blur-md"
+                    />
+                    {/* Lomo colorido */}
+                    <div className="absolute inset-y-0 -left-2.5 w-3.5 rounded-l-2xl overflow-hidden shadow-md">
+                      <div className="absolute inset-0 bg-gradient-to-b from-[#1a5fb4] via-[#e31c23] to-[#f0c14b]" />
+                    </div>
+                    <div
+                      aria-hidden
+                      className="absolute inset-y-3 -right-2 w-2 rounded-r-xl bg-gradient-to-b from-white via-[#fff4e8] to-[#ffe0e8] border border-[#ffd6e2]/60"
+                    />
+                    <div className="relative h-full overflow-hidden rounded-2xl border-2 border-white shadow-[0_25px_70px_rgba(26,60,120,0.28)] ring-1 ring-[#7ec8e3]/40">
+                      {cover}
+                    </div>
+                  </button>
+                </motion.div>
+              ) : (
+                <motion.div
+                  key="open-book"
+                  className="absolute inset-0"
+                  initial={{ opacity: 0, scale: 0.97 }}
+                  animate={{ opacity: 1, scale: 1 }}
+                  exit={{ opacity: 0, scale: 0.98 }}
+                  transition={{ duration: 0.35 }}
                 >
                   <div
                     aria-hidden
-                    className="absolute inset-0 translate-x-2 translate-y-3 rounded-r-md rounded-l-sm bg-black/20 blur-md"
+                    className="absolute inset-x-8 bottom-0 h-7 bg-black/20 blur-xl rounded-full"
                   />
-                  {/* Lomo colorido */}
-                  <div className="absolute inset-y-0 -left-2.5 w-3.5 rounded-l-2xl overflow-hidden shadow-md">
-                    <div className="absolute inset-0 bg-gradient-to-b from-[#1a5fb4] via-[#e31c23] to-[#f0c14b]" />
+                  <div className="relative h-full album-book-shell">
+                    <div
+                      aria-hidden
+                      className="absolute -left-1 inset-y-2 w-3 rounded-l-md bg-gradient-to-r from-[#2a1a0c] to-[#6b4423]"
+                    />
+                    <FlipBook
+                      spreads={spreads}
+                      index={displayIndex}
+                      flip={flip}
+                    />
                   </div>
-                  <div
-                    aria-hidden
-                    className="absolute inset-y-3 -right-2 w-2 rounded-r-xl bg-gradient-to-b from-white via-[#fff4e8] to-[#ffe0e8] border border-[#ffd6e2]/60"
-                  />
-                  <div className="relative h-full overflow-hidden rounded-2xl border-2 border-white shadow-[0_25px_70px_rgba(26,60,120,0.28)] ring-1 ring-[#7ec8e3]/40">
-                    {cover}
-                  </div>
-                </button>
-              </motion.div>
-            ) : (
-              <motion.div
-                key="open-book"
-                className="absolute inset-0"
-                initial={{ opacity: 0, scale: 0.97 }}
-                animate={{ opacity: 1, scale: 1 }}
-                exit={{ opacity: 0, scale: 0.98 }}
-                transition={{ duration: 0.35 }}
-              >
-                <div
-                  aria-hidden
-                  className="absolute inset-x-8 bottom-0 h-7 bg-black/20 blur-xl rounded-full"
-                />
-                <div className="relative h-full album-book-shell">
-                  <div
-                    aria-hidden
-                    className="absolute -left-1 inset-y-2 w-3 rounded-l-md bg-gradient-to-r from-[#2a1a0c] to-[#6b4423]"
-                  />
-                  <FlipBook
-                    spreads={spreads}
-                    index={displayIndex}
-                    flip={flip}
-                  />
-                </div>
-              </motion.div>
-            )}
-          </AnimatePresence>
-        </div>
-
-        <NavArrow
-          label="Siguiente"
-          disabled={!canNext || !!flip}
-          onClick={() => go(1)}
-          side="right"
-        />
-      </div>
-
-      <div className="shrink-0 pb-3 px-4 flex flex-col items-center gap-2">
-        <p className="font-display text-xs uppercase tracking-[0.14em] text-[#1a2a44]/45 font-bold">
-          {!opened
-            ? "Portada · álbum cerrado"
-            : `Pliego ${(flip ? flip.to : index) + 1} / ${spreads.length}`}
-        </p>
-        {opened && (
-          <div className="flex flex-wrap justify-center gap-1.5 max-w-4xl max-h-14 overflow-hidden">
-            {spreads.map((s, i) => (
-              <button
-                key={s.id}
-                type="button"
-                disabled={!!flip}
-                onClick={() => jumpTo(i)}
-                className={`font-display text-[11px] font-bold px-3 py-1 rounded-full transition ${
-                  i === (flip ? flip.to : index)
-                    ? "bg-[#1a5fb4] text-white shadow-md scale-105"
-                    : "bg-white/80 text-[#1a2a44]/55 hover:bg-white hover:text-[#1a5fb4]"
-                }`}
-              >
-                {s.label}
-              </button>
-            ))}
+                </motion.div>
+              )}
+            </AnimatePresence>
           </div>
-        )}
-        <p className="text-[11px] text-[#1a2a44]/4">
-          {!opened
-            ? "Abrí el álbum para ver el viaje a doble página"
-            : "Pasá las hojas con las flechas o el teclado"}
-        </p>
+
+          <NavArrow
+            label="Siguiente"
+            disabled={!canNext || !!flip}
+            onClick={() => go(1)}
+            side="right"
+          />
+        </div>
       </div>
-    </div>
+    </AlbumSpreadProvider>
   );
 }
 

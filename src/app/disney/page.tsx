@@ -3,6 +3,7 @@ import { getDisneyParks } from "@/data/parks";
 import { birthdayRestaurants } from "@/data/hhn";
 import { images } from "@/data/images";
 import { ParkCard } from "@/components/ParkCard";
+import { RestaurantCard } from "@/components/RestaurantCard";
 
 export default function DisneyPage() {
   const parks = getDisneyParks();
@@ -32,7 +33,10 @@ export default function DisneyPage() {
         ))}
       </div>
 
-      <section className="mt-12 card-magic rounded-3xl overflow-hidden border-2 border-gold/50">
+      <section
+        id="cena"
+        className="mt-12 scroll-mt-24 card-magic rounded-3xl overflow-hidden border-2 border-gold/50"
+      >
         <div className="relative h-36">
           <Image
             src={images.birthdayDinner}
@@ -49,28 +53,11 @@ export default function DisneyPage() {
         </div>
         <div className="p-6 md:p-8">
           <p className="text-ink/70 mb-6">
-            Maria Alejandra Diaz cumple 60. Default propuesto: <strong>Capa</strong>.
+            Maria Alejandra Diaz cumple 60. El propuesto: <strong>Capa</strong>.
           </p>
           <div className="grid md:grid-cols-2 gap-4">
             {birthdayRestaurants.map((r) => (
-              <div
-                key={r.id}
-                className={`rounded-2xl p-4 bg-white/70 ${
-                  r.isDefault ? "ring-2 ring-gold" : ""
-                }`}
-              >
-                {r.isDefault && (
-                  <span className="text-xs font-bold text-amber-700 bg-gold/40 px-2 py-0.5 rounded-full">
-                    DEFAULT
-                  </span>
-                )}
-                <h3 className="font-display text-xl font-bold mt-1">{r.name}</h3>
-                <p className="text-sm text-ink/60">{r.location}</p>
-                <p className="text-sm mt-2">{r.why}</p>
-                <p className="text-xs text-ink/50 mt-2">
-                  {r.vibe} · {r.tip}
-                </p>
-              </div>
+              <RestaurantCard key={r.id} restaurant={r} />
             ))}
           </div>
         </div>

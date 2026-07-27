@@ -1,10 +1,10 @@
 "use client";
 
 import Image from "next/image";
-import Link from "next/link";
 import type { ItineraryDay } from "@/types/trip";
 import { dayDescriptions, dayImages, images } from "@/data/images";
 import { useVisitor } from "@/components/VisitorProvider";
+import { AlbumCtaLink } from "@/components/AlbumCtaLink";
 import {
   activitiesForVisitor,
   earlyEntryForDay,
@@ -320,12 +320,12 @@ export function AlbumChapterLeaf({
           >
             {subtitle}
           </p>
-          <Link
+          <AlbumCtaLink
             href={href}
             className={`album-cta mt-4 ${dark ? "album-cta-dark" : ""}`}
           >
             {cta} →
-          </Link>
+          </AlbumCtaLink>
         </div>
       </div>
     </div>
@@ -383,7 +383,7 @@ export function AlbumDayLeaf({
                 sizes="260px"
               />
             </div>
-            <p className="mt-1.5 text-center font-display text-xs font-bold text-[#1a2a44]/8">
+            <p className="mt-1.5 text-center font-display text-xs font-bold text-[#1a2a44]">
               {dateLine}
             </p>
           </div>
@@ -499,38 +499,56 @@ function DayLeafFooter({
   if (day.theme === "halloween" && day.sharedPart?.index === 2) {
     return (
       <div className="mt-2 flex shrink-0 flex-col gap-1.5">
-        <Link href="/universal/halloween#casas" className="album-cta album-cta-dark">
+        <AlbumCtaLink href="/universal/halloween#casas" className="album-cta album-cta-dark">
           Ver casas 🎃
-        </Link>
-        <Link
+        </AlbumCtaLink>
+        <AlbumCtaLink
           href="/universal/halloween"
           className="font-display text-sm font-bold text-[#ffb089]"
         >
           Portal HHN →
-        </Link>
+        </AlbumCtaLink>
+      </div>
+    );
+  }
+
+  if (day.theme === "birthday" || day.day === 6) {
+    return (
+      <div className="mt-2 flex shrink-0 flex-col gap-1.5">
+        <AlbumCtaLink href="/disney#cena" className="album-cta">
+          Elegir dónde cenamos 🎂
+        </AlbumCtaLink>
+        {detailHref && (
+          <AlbumCtaLink
+            href={detailHref}
+            className="font-display text-sm font-bold text-[#1a5fb4]"
+          >
+            Animal Kingdom →
+          </AlbumCtaLink>
+        )}
       </div>
     );
   }
 
   if (day.day === 7 || (day.theme === "shopping" && day.day === 11)) {
     return (
-      <Link href="/shopping#centros" className="album-cta mt-2 shrink-0">
+      <AlbumCtaLink href="/shopping#centros" className="album-cta mt-2 shrink-0">
         Shoppings →
-      </Link>
+      </AlbumCtaLink>
     );
   }
 
   if (!detailHref) return null;
 
   return (
-    <Link
+    <AlbumCtaLink
       href={detailHref}
       className={`mt-2 shrink-0 font-display text-sm font-bold ${
         dark ? "text-[#ffb089]" : "text-[#1a5fb4]"
       }`}
     >
       Ver detalle →
-    </Link>
+    </AlbumCtaLink>
   );
 }
 
@@ -607,15 +625,15 @@ export function AlbumClosingRight() {
         <p className="text-sm leading-relaxed text-[#1a2a44]/65">
           Coleccioná stickers y mirá el calendario completo.
         </p>
-        <Link href="/calendario" className="album-cta w-full justify-center">
+        <AlbumCtaLink href="/calendario" className="album-cta w-full justify-center">
           Calendario
-        </Link>
-        <Link
+        </AlbumCtaLink>
+        <AlbumCtaLink
           href="/album"
           className="album-cta album-cta-ghost w-full justify-center"
         >
           Stickers
-        </Link>
+        </AlbumCtaLink>
       </div>
     </div>
   );
@@ -635,12 +653,12 @@ export function AlbumHhnPortalLeaf() {
         <p className="mt-2 max-w-xs text-sm leading-relaxed text-white/65">
           Casas, scarezones y tips. Modo valiente o miedoso — vos elegís.
         </p>
-        <Link
+        <AlbumCtaLink
           href="/universal/halloween"
           className="album-cta album-cta-dark mt-5"
         >
           Entrar a HHN →
-        </Link>
+        </AlbumCtaLink>
       </div>
     </div>
   );

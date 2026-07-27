@@ -8,6 +8,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { images } from "@/data/images";
 import { BrandLogo } from "@/components/BrandLogo";
+import { BrandSearch } from "@/components/BrandSearch";
 
 const foodIdeas = [
   "Chicken tenders + lemonade",
@@ -68,6 +69,8 @@ export default function ShoppingPage() {
           {spinning ? "Girando…" : "Girar 🎲"}
         </button>
       </div>
+
+      <BrandSearch centers={centers} />
 
       <h2
         id="centros"

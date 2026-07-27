@@ -6,10 +6,13 @@ import {
   Nunito,
   Oswald,
 } from "next/font/google";
+import { DesktopOnlyGate } from "@/components/DesktopOnlyGate";
 import { RegisterSW } from "@/components/RegisterSW";
 import { VisitorProvider } from "@/components/VisitorProvider";
 import { WhoAreYouGate } from "@/components/WhoAreYouGate";
 import { TripHeader } from "@/components/TripHeader";
+import { BackToAlbum } from "@/components/BackToAlbum";
+import { isMobileBlocked } from "@/lib/isMobileRequest";
 import "./globals.css";
 
 const fredoka = Fredoka({
@@ -78,26 +81,35 @@ export const viewport: Viewport = {
   viewportFit: "cover",
 };
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const mobileBlocked = await isMobileBlocked();
+
   return (
     <html
       lang="es"
       className={`${fredoka.variable} ${nunito.variable} ${cormorant.variable} ${greatVibes.variable} ${oswald.variable} h-full antialiased`}
     >
       <body className="min-h-full flex flex-col font-body">
-        <VisitorProvider>
-          <RegisterSW />
-          <WhoAreYouGate />
-          <TripHeader />
-          <main className="flex-1">{children}</main>
-          <footer className="text-center text-sm text-ink/50 py-8 px-4">
-            Hecho con magia para Gala, Agustin, Alejandra, Emma y Marcelo · 2026
-          </footer>
-        </VisitorProvider>
+        {mobileBlocked ? (
+          <DesktopOnlyGate />
+        ) : (
+          <VisitorProvider>
+            <RegisterSW />
+            <WhoAreYouGate />
+            <TripHeader />
+            <main className="flex-1">
+              <BackToAlbum />
+              {children}
+            </main>
+            <footer className="text-center text-sm text-ink/50 py-8 px-4">
+              Hecho con magia para Gala, Agustin, Alejandra, Emma y Marcelo · 2026
+            </footer>
+          </VisitorProvider>
+        )}
       </body>
     </html>
   );

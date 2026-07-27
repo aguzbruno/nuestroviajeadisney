@@ -43,9 +43,9 @@ export const images = {
   chapterSalida:
     "https://images.unsplash.com/photo-1436491865332-7a61a109cc05?w=1200&q=80",
   chapterDisney:
-    "https://images.unsplash.com/photo-1566737236500-c8ac43014a67?w=1200&q=80",
+    "https://upload.wikimedia.org/wikipedia/commons/3/3f/Fireworks_over_Cinderella_Castle_Magic_Kingdom.jpg",
   chapterUniversal:
-    "https://images.unsplash.com/photo-1533174072545-7a4b6ad7a6c3?w=1200&q=80",
+    "https://upload.wikimedia.org/wikipedia/commons/thumb/8/88/How_to_Train_Your_Dragon_-_Isle_of_Berk_-_54563945175.jpg/1280px-How_to_Train_Your_Dragon_-_Isle_of_Berk_-_54563945175.jpg",
   chapterNyc:
     "https://images.unsplash.com/photo-1518391846015-55a9cc003b25?w=1200&q=80",
   chapterHhn:

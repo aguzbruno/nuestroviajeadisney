@@ -216,6 +216,16 @@ export function DayDetailModal({
                 </div>
               )}
 
+              {(day.theme === "birthday" || day.day === 6) && (
+                <Link
+                  href="/disney#cena"
+                  onClick={onClose}
+                  className="mt-5 inline-flex w-full items-center justify-center font-display font-semibold bg-mickey text-white rounded-2xl px-4 py-3 text-sm hover:opacity-90 transition-opacity"
+                >
+                  Elegir dónde cenamos 🎂
+                </Link>
+              )}
+
               {(day.day === 7 || day.day === 11) && (
                 <Link
                   href="/shopping#centros"

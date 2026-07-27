@@ -22,7 +22,7 @@ export const pendingItems = [
     id: "cena",
     label: "Cena cumpleaños 04/10",
     status: "default" as const,
-    detail: "Default propuesto: Capa (Four Seasons). Alternativas en /disney/animal-kingdom.",
+    detail: "El propuesto: Capa (Four Seasons). Alternativas en /disney/animal-kingdom.",
   },
   {
     id: "hhn-tickets",
