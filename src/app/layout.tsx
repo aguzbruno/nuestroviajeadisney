@@ -105,7 +105,7 @@ export default async function RootLayout({
               <BackToAlbum />
               {children}
             </main>
-            <footer className="text-center text-sm text-ink/50 py-8 px-4">
+            <footer className="px-4 pb-[max(2rem,var(--safe-bottom))] pt-8 text-center text-sm text-ink/50">
               Hecho con magia para Gala, Agustin, Alejandra, Emma y Marcelo · 2026
             </footer>
           </VisitorProvider>

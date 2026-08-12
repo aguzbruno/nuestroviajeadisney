@@ -11,6 +11,11 @@
   --hhn-night: #1a0a2e;
   --hhn-purple: #6b2d8b;
   --hhn-orange: #ff6b35;
+  /* PWA / notch / home indicator (viewport-fit=cover) */
+  --safe-top: env(safe-area-inset-top, 0px);
+  --safe-right: env(safe-area-inset-right, 0px);
+  --safe-bottom: env(safe-area-inset-bottom, 0px);
+  --safe-left: env(safe-area-inset-left, 0px);
 }
 
 @theme inline {
@@ -353,5 +358,5 @@ body[data-album-mode="true"] > footer {
 }
 
 body[data-album-immersive="true"] .album-book-frame {
-  max-height: min(720px, calc(100dvh - 1.5rem));
+  max-height: min(720px, calc(100dvh - 1.5rem - var(--safe-top) - var(--safe-bottom)));
 }

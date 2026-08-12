@@ -189,7 +189,7 @@ export function WhoAreYouGate() {
         <button
           type="button"
           onClick={finishIntro}
-          className="absolute bottom-8 right-6 z-10 rounded-full bg-white/90 px-5 py-2.5 font-display text-sm font-bold text-[#1a5fb4] shadow-lg transition hover:scale-105"
+          className="absolute z-10 rounded-full bg-white/90 px-5 py-2.5 font-display text-sm font-bold text-[#1a5fb4] shadow-lg transition hover:scale-105 bottom-[max(2rem,var(--safe-bottom))] right-[max(1.5rem,var(--safe-right))]"
         >
           Saltar intro
         </button>
@@ -203,7 +203,7 @@ export function WhoAreYouGate() {
       <span className="album-blob pointer-events-none fixed -right-12 top-24 h-44 w-44 bg-[#f0c14b]/35" />
       <span className="album-blob pointer-events-none fixed bottom-10 left-1/4 h-36 w-40 bg-[#ff8fab]/3" />
 
-      <div className="relative mx-auto flex min-h-full w-full max-w-2xl flex-col justify-center px-4 py-10">
+      <div className="relative mx-auto flex min-h-full w-full max-w-2xl flex-col justify-center pl-[max(1rem,var(--safe-left))] pr-[max(1rem,var(--safe-right))] pt-[max(2.5rem,calc(var(--safe-top)+1.5rem))] pb-[max(2.5rem,calc(var(--safe-bottom)+1.5rem))]">
         <div className="mb-7 text-center">
           <Logo size={68} className="mx-auto mb-4 rounded-2xl shadow-lg ring-2 ring-white" />
 

@@ -101,7 +101,7 @@ export function DayDetailModal({
             animate={{ opacity: 1, y: 0, scale: 1 }}
             exit={{ opacity: 0, y: 24, scale: 0.98 }}
             transition={{ type: "spring", stiffness: 380, damping: 32 }}
-            className={`relative z-10 w-full sm:max-w-lg max-h-[92vh] overflow-y-auto rounded-t-3xl sm:rounded-3xl bg-gradient-to-br shadow-2xl ${themeStyles[day.theme] ?? "from-white to-white"}`}
+            className={`relative z-10 w-full sm:max-w-lg max-h-[92vh] overflow-y-auto rounded-t-3xl sm:rounded-3xl bg-gradient-to-br shadow-2xl pb-[var(--safe-bottom)] ${themeStyles[day.theme] ?? "from-white to-white"}`}
           >
             <button
               type="button"

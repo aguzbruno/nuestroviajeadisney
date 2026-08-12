@@ -339,7 +339,7 @@ function MobileScrollStory({
   return (
     <div className="relative">
       <motion.div
-        className="fixed top-0 left-0 right-0 h-1.5 origin-left z-[60] bg-gradient-to-r from-mk-blue via-mickey to-gold"
+        className="fixed top-[var(--safe-top)] left-0 right-0 z-[60] h-1.5 origin-left bg-gradient-to-r from-mk-blue via-mickey to-gold"
         style={{ scaleX: progress }}
       />
 
@@ -516,8 +516,8 @@ function DesktopAlbum({
   const albumHeightClass = !navUnlocked
     ? "h-dvh"
     : visitor?.birthdayMode
-      ? "h-[calc(100dvh-7.25rem)]"
-      : "h-[calc(100dvh-4.75rem)]";
+      ? "h-[calc(100dvh-7.25rem-var(--safe-top))]"
+      : "h-[calc(100dvh-4.75rem-var(--safe-top))]";
 
   return (
     <div className={albumHeightClass}>
