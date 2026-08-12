@@ -25,6 +25,7 @@ import type { ItineraryDay } from "@/types/trip";
 import {
   ALBUM_NAV_UNLOCKED_EVENT,
   isAlbumNavUnlocked,
+  unlockAlbumNav,
 } from "@/lib/storage";
 
 function Chapter({
@@ -324,6 +325,11 @@ function MobileScrollStory({
 }) {
   const { scrollYProgress } = useScroll();
   const progress = useSpring(scrollYProgress, { stiffness: 100, damping: 30 });
+
+  // Mobile usa scroll, no el álbum inmersivo: desbloquear nav de inmediato.
+  useEffect(() => {
+    unlockAlbumNav();
+  }, []);
 
   const disney = itinerary.filter((d) => d.chapter === "disney");
   const universalPages = getUniversalStoryPages();

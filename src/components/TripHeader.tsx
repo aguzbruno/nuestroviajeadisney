@@ -47,11 +47,13 @@ export function TripHeader() {
   const [albumNavUnlocked, setAlbumNavUnlocked] = useState<boolean | null>(
     null,
   );
+  const [isMobileViewport, setIsMobileViewport] = useState(false);
   const moreRef = useRef<HTMLDivElement>(null);
 
   const moreIsActive = moreLinks.some((l) => linkActive(pathname, l.href));
-  // En `/` ocultar hasta confirmar desbloqueo (primera visita inmersiva).
-  const hideOnAlbum = pathname === "/" && albumNavUnlocked !== true;
+  // En `/` desktop: ocultar hasta desbloqueo (álbum inmersivo). En mobile siempre visible.
+  const hideOnAlbum =
+    pathname === "/" && albumNavUnlocked !== true && !isMobileViewport;
 
   useEffect(() => {
     setAlbumNavUnlocked(isAlbumNavUnlocked());
@@ -60,6 +62,14 @@ export function TripHeader() {
     }
     window.addEventListener(ALBUM_NAV_UNLOCKED_EVENT, onUnlock);
     return () => window.removeEventListener(ALBUM_NAV_UNLOCKED_EVENT, onUnlock);
+  }, []);
+
+  useEffect(() => {
+    const mq = window.matchMedia("(max-width: 1023px)");
+    const update = () => setIsMobileViewport(mq.matches);
+    update();
+    mq.addEventListener("change", update);
+    return () => mq.removeEventListener("change", update);
   }, []);
 
   useEffect(() => {

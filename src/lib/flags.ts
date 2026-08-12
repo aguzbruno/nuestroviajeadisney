@@ -3,5 +3,5 @@
  */
 export const flags = {
   /** When true, blocks phones and tablets with a desktop-only message. */
-  blockMobile: true,
+  blockMobile: false,
 } as const;
