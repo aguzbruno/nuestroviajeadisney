@@ -16,7 +16,8 @@ export const pendingItems = [
     id: "day09",
     label: "09/10: shopping vs 2º Epic",
     status: "default" as const,
-    detail: "Default del plan: shopping (outlets / otro centro).",
+    detail:
+      "Default del plan: shopping. Los elegidos son International Premium Outlets y The Florida Mall.",
   },
   {
     id: "cena",

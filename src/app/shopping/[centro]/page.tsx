@@ -38,9 +38,16 @@ export default function ShoppingCenterPage({
           >
             ← Shopping Orlando
           </Link>
-          <p className="mt-3 text-xs font-semibold uppercase tracking-wider opacity-90">
-            {center.type}
-          </p>
+          <div className="mt-3 flex flex-wrap items-center gap-2">
+            <p className="text-xs font-semibold uppercase tracking-wider opacity-90">
+              {center.type}
+            </p>
+            {center.chosen && (
+              <span className="text-[10px] uppercase font-bold tracking-wider bg-white text-mk-blue rounded-full px-2.5 py-1">
+                ✓ Vamos
+              </span>
+            )}
+          </div>
           <h1 className="font-display text-3xl md:text-5xl font-bold mt-1">
             {center.name}
           </h1>

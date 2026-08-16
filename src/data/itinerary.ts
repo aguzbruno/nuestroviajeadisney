@@ -300,7 +300,8 @@ export const itinerary: ItineraryDay[] = [
       {
         time: "~13:00",
         title: "Ir de shopping",
-        detail: "Modo: volverse locos de shopping 🛍️ (1–2 centros máx., outlets / mall)",
+        detail:
+          "International Premium Outlets (I-Drive) y/o The Florida Mall — los dos elegidos 🛍️",
         type: "shopping",
       },
       {
@@ -454,12 +455,12 @@ export const itinerary: ItineraryDay[] = [
       {
         time: "10:00",
         title: "Salida",
-        detail: "Outlets / mall o vuelta a Epic",
+        detail: "El que haya quedado pendiente del 05/10, o vuelta a Epic",
         type: "event",
       },
       {
-        title: "Shopping Orlando",
-        detail: "Alternativa: repetir Epic Universe",
+        title: "International Premium Outlets / The Florida Mall",
+        detail: "Los dos elegidos. Alternativa: repetir Epic Universe",
         type: "shopping",
       },
       {

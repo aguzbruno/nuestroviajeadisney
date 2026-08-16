@@ -1,6 +1,6 @@
 "use client";
 
-import { shoppingCenters } from "@/data/shopping";
+import { getChosenCenters, shoppingCenters } from "@/data/shopping";
 import { StickerUnlock } from "@/components/StickerUnlock";
 import { useMemo, useState } from "react";
 import { motion } from "framer-motion";
@@ -22,7 +22,14 @@ const foodIdeas = [
 export default function ShoppingPage() {
   const [spin, setSpin] = useState(foodIdeas[0]);
   const [spinning, setSpinning] = useState(false);
-  const centers = useMemo(() => shoppingCenters, []);
+  const chosen = useMemo(() => getChosenCenters(), []);
+  const centers = useMemo(
+    () =>
+      [...shoppingCenters].sort(
+        (a, b) => Number(b.chosen ?? false) - Number(a.chosen ?? false),
+      ),
+    [],
+  );
 
   function roulette() {
     setSpinning(true);
@@ -48,6 +55,34 @@ export default function ShoppingPage() {
           <h1 className="font-display text-4xl md:text-5xl font-bold">Shopping Orlando</h1>
           <p className="opacity-90 mt-1">Día 05/10 · opcional también 09/10</p>
         </div>
+      </div>
+      <div className="card-magic rounded-2xl p-5 mb-4">
+        <div className="text-xs uppercase tracking-wider text-ink/50 font-semibold">
+          A dónde vamos
+        </div>
+        <div className="grid sm:grid-cols-2 gap-3 mt-3">
+          {chosen.map((c) => (
+            <Link
+              key={c.id}
+              href={`/shopping/${c.id}`}
+              className="flex items-start gap-3 bg-white rounded-xl border border-mk-blue/15 px-4 py-3 hover:border-mk-blue/40 transition"
+            >
+              <span className="text-lg leading-none mt-0.5">🛍️</span>
+              <span>
+                <span className="font-display font-bold block leading-tight">
+                  {c.name}
+                </span>
+                <span className="text-xs text-ink/60">
+                  {c.type} · {c.distanceFromEndlessSummer}
+                </span>
+              </span>
+            </Link>
+          ))}
+        </div>
+        <p className="text-sm text-ink/70 mt-3">
+          Los dos elegidos del viaje: el outlet de International Drive (no el de
+          Vineland) y el mall cerrado. El resto queda como alternativa.
+        </p>
       </div>
       <div className="bg-amber-100/80 border border-amber-300 rounded-2xl px-4 py-3 text-sm text-amber-900 mb-8">
         ⏳ 09/10 default: otro día de shopping. Alternativa: repetir Epic.
@@ -79,8 +114,9 @@ export default function ShoppingPage() {
         Shoppings y marcas
       </h2>
       <p className="text-ink/60 text-sm mb-6 max-w-2xl">
-        Cada centro con su página de marcas. Elegí 1–2 máx. el día del cambio de
-        hotel (05/10) — o repetí el 09/10.
+        Vamos al International Premium Outlets y a The Florida Mall — marcados
+        como <strong>elegidos</strong>. Los demás quedan listados por si cambia
+        el plan.
       </p>
 
       <div className="grid md:grid-cols-2 gap-5">
@@ -92,7 +128,9 @@ export default function ShoppingPage() {
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ delay: i * 0.04 }}
-            className="card-magic rounded-3xl overflow-hidden scroll-mt-24 flex flex-col"
+            className={`card-magic rounded-3xl overflow-hidden scroll-mt-24 flex flex-col ${
+              c.chosen ? "border-2 border-mk-blue" : ""
+            }`}
           >
             <Link href={`/shopping/${c.id}`} className="block relative h-36 group">
               {c.image && (
@@ -107,6 +145,11 @@ export default function ShoppingPage() {
               <div className="absolute bottom-2 left-3 text-white text-xs font-semibold uppercase tracking-wider">
                 {c.type}
               </div>
+              {c.chosen && (
+                <span className="absolute top-3 right-3 text-[10px] uppercase font-bold tracking-wider bg-mk-blue text-white rounded-full px-2.5 py-1">
+                  ✓ Vamos
+                </span>
+              )}
             </Link>
             <div className="p-5 flex flex-col flex-1">
               <h3 className="font-display text-2xl font-bold">
@@ -150,7 +193,8 @@ export default function ShoppingPage() {
 
       <div className="mt-10 card-magic rounded-2xl p-5 text-sm">
         <strong>Flujo sugerido 05/10:</strong> check-out All-Star → check-in Endless
-        Summer → 1–2 centros máx. → CityWalk / cena suave → descanso.
+        Summer → International Premium Outlets y/o The Florida Mall → CityWalk /
+        cena suave → descanso. Si queda algo, se completa el 09/10.
       </div>
     </div>
   );

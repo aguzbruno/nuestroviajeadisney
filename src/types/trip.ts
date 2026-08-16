@@ -151,6 +151,8 @@ export interface ShoppingCenter {
   distanceFromEndlessSummer: string;
   bestFor: string;
   image?: string;
+  /** Centro confirmado del plan (a los que efectivamente vamos). */
+  chosen?: boolean;
 }
 
 export interface RestaurantOption {

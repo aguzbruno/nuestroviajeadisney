@@ -38,6 +38,7 @@ export const shoppingCenters: ShoppingCenter[] = [
     ],
     distanceFromEndlessSummer: "~15–25 min en auto/Uber",
     bestFor: "Gangas y marcas deportivas",
+    chosen: true,
   },
   {
     id: "vineland-premium",
@@ -64,8 +65,8 @@ export const shoppingCenters: ShoppingCenter[] = [
       "underarmour",
     ),
     tips: [
-      "No intentar International + Vineland el mismo día completo",
-      "Buen combo con día 09 si el 05 ya hicieron uno",
+      "No está en el plan: elegimos el International (I-Drive)",
+      "Alternativa si quieren marcas más high-end",
     ],
     distanceFromEndlessSummer: "~20–30 min",
     bestFor: "Marcas un poco más premium",
@@ -96,6 +97,7 @@ export const shoppingCenters: ShoppingCenter[] = [
     tips: ["Plan B climático", "Food court amplio para el grupo"],
     distanceFromEndlessSummer: "~20–25 min",
     bestFor: "Día de lluvia / Apple / indoor",
+    chosen: true,
   },
   {
     id: "disney-springs",
@@ -181,4 +183,9 @@ export const shoppingCenters: ShoppingCenter[] = [
 
 export function getShoppingCenter(id: string): ShoppingCenter | undefined {
   return shoppingCenters.find((c) => c.id === id);
+}
+
+/** Los centros a los que vamos: International Premium Outlets + The Florida Mall. */
+export function getChosenCenters(): ShoppingCenter[] {
+  return shoppingCenters.filter((c) => c.chosen);
 }
