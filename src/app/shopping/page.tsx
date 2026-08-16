@@ -53,7 +53,7 @@ export default function ShoppingPage() {
         <div className="absolute inset-0 bg-gradient-to-r from-pink-900/70 to-mk-blue/40" />
         <div className="absolute inset-0 flex flex-col justify-end p-6 text-white">
           <h1 className="font-display text-4xl md:text-5xl font-bold">Shopping Orlando</h1>
-          <p className="opacity-90 mt-1">Día 05/10 · opcional también 09/10</p>
+          <p className="opacity-90 mt-1">05/10: Premium Outlets + Florida Mall · comodín 09/10</p>
         </div>
       </div>
       <div className="card-magic rounded-2xl p-5 mb-4">
@@ -61,13 +61,15 @@ export default function ShoppingPage() {
           A dónde vamos
         </div>
         <div className="grid sm:grid-cols-2 gap-3 mt-3">
-          {chosen.map((c) => (
+          {chosen.map((c, i) => (
             <Link
               key={c.id}
               href={`/shopping/${c.id}`}
               className="flex items-start gap-3 bg-white rounded-xl border border-mk-blue/15 px-4 py-3 hover:border-mk-blue/40 transition"
             >
-              <span className="text-lg leading-none mt-0.5">🛍️</span>
+              <span className="font-display font-bold text-sm w-6 h-6 rounded-full bg-mk-blue text-white flex items-center justify-center shrink-0">
+                {i + 1}
+              </span>
               <span>
                 <span className="font-display font-bold block leading-tight">
                   {c.name}
@@ -80,12 +82,13 @@ export default function ShoppingPage() {
           ))}
         </div>
         <p className="text-sm text-ink/70 mt-3">
-          Los dos elegidos del viaje: el outlet de International Drive (no el de
-          Vineland) y el mall cerrado. El resto queda como alternativa.
+          Los dos van el 05/10, en ese orden: primero el outlet de International
+          Drive (no el de Vineland) y después el mall cerrado. El resto queda
+          como alternativa.
         </p>
       </div>
       <div className="bg-amber-100/80 border border-amber-300 rounded-2xl px-4 py-3 text-sm text-amber-900 mb-8">
-        ⏳ 09/10 default: otro día de shopping. Alternativa: repetir Epic.
+        ⏳ 09/10 default: volver por lo que haya quedado. Alternativa: repetir Epic.
       </div>
 
       <div className="card-magic rounded-3xl p-5 mb-10 flex flex-wrap items-center justify-between gap-4">
@@ -114,9 +117,9 @@ export default function ShoppingPage() {
         Shoppings y marcas
       </h2>
       <p className="text-ink/60 text-sm mb-6 max-w-2xl">
-        Vamos al International Premium Outlets y a The Florida Mall — marcados
-        como <strong>elegidos</strong>. Los demás quedan listados por si cambia
-        el plan.
+        El 05/10 vamos al International Premium Outlets y después a The Florida
+        Mall — marcados como <strong>elegidos</strong>. Los demás quedan
+        listados por si cambia el plan.
       </p>
 
       <div className="grid md:grid-cols-2 gap-5">
@@ -193,8 +196,8 @@ export default function ShoppingPage() {
 
       <div className="mt-10 card-magic rounded-2xl p-5 text-sm">
         <strong>Flujo sugerido 05/10:</strong> check-out All-Star → check-in Endless
-        Summer → International Premium Outlets y/o The Florida Mall → CityWalk /
-        cena suave → descanso. Si queda algo, se completa el 09/10.
+        Summer → ~13:00 International Premium Outlets → ~16:30 The Florida Mall →
+        CityWalk / cena suave → descanso. Si queda algo, se vuelve el 09/10.
       </div>
     </div>
   );

@@ -273,11 +273,11 @@ export const itinerary: ItineraryDay[] = [
     date: "2026-10-05",
     dateLabel: "lun 5 oct",
     title: "Cambio de hotel + Shopping",
-    subtitle: "Check-in Endless Summer",
+    subtitle: "Check-in Endless Summer · Premium Outlets + Florida Mall",
     theme: "shopping",
     chapter: "disney",
     description:
-      "Cierre del tramo Disney: check-out All-Star, check-in Endless Summer… y permiso oficial para volverse locos de shopping (1–2 centros máx.).",
+      "Cierre del tramo Disney: check-out All-Star, check-in Endless Summer… y permiso oficial para volverse locos de shopping. Primero el International Premium Outlets y después The Florida Mall.",
     activities: [
       {
         time: "08:00",
@@ -299,9 +299,14 @@ export const itinerary: ItineraryDay[] = [
       },
       {
         time: "~13:00",
-        title: "Ir de shopping",
-        detail:
-          "International Premium Outlets (I-Drive) y/o The Florida Mall — los dos elegidos 🛍️",
+        title: "Orlando International Premium Outlets",
+        detail: "Primera parada: outlet de I-Drive (~15–25 min) 🛍️",
+        type: "shopping",
+      },
+      {
+        time: "~16:30",
+        title: "The Florida Mall",
+        detail: "Segunda parada: mall cerrado (~20 min desde el outlet)",
         type: "shopping",
       },
       {
@@ -440,11 +445,11 @@ export const itinerary: ItineraryDay[] = [
     date: "2026-10-09",
     dateLabel: "vie 9 oct",
     title: "Shopping (o Epic 2)",
-    subtitle: "Default: otro día de outlets",
+    subtitle: "Default: volver a los centros del 05/10",
     theme: "shopping",
     chapter: "universal",
     description:
-      "Día comodín: shopping si faltó algo, o segundo round en Epic Universe si quedó pendiente.",
+      "Día comodín: volver por lo que haya quedado en el outlet o el mall, o segundo round en Epic Universe.",
     activities: [
       {
         time: "08:30",
@@ -455,12 +460,12 @@ export const itinerary: ItineraryDay[] = [
       {
         time: "10:00",
         title: "Salida",
-        detail: "El que haya quedado pendiente del 05/10, o vuelta a Epic",
+        detail: "Volver a comprar lo que quedó pendiente, o vuelta a Epic",
         type: "event",
       },
       {
-        title: "International Premium Outlets / The Florida Mall",
-        detail: "Los dos elegidos. Alternativa: repetir Epic Universe",
+        title: "Premium Outlets o Florida Mall (repetir)",
+        detail: "Los mismos del 05/10. Alternativa: repetir Epic Universe",
         type: "shopping",
       },
       {
