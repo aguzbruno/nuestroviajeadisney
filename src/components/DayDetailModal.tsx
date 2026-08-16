@@ -15,15 +15,16 @@ import {
 } from "@/lib/itinerary";
 import { EarlyEntryChip } from "@/components/EarlyEntryChip";
 
+/** Degradés opacos: el panel del modal nunca deja ver la página de atrás. */
 const themeStyles: Record<string, string> = {
-  travel: "from-sky/40 to-white",
-  disney: "from-mk-blue/20 to-gold/20",
-  universal: "from-purple-200/50 to-white",
-  halloween: "from-hhn-purple/40 to-hhn-orange/20",
+  travel: "from-sky-100 to-white",
+  disney: "from-blue-100 to-amber-100",
+  universal: "from-purple-100 to-white",
+  halloween: "from-purple-200 to-orange-100",
   shopping: "from-pink-100 to-white",
-  nyc: "from-slate-200/60 to-white",
+  nyc: "from-slate-200 to-white",
   rest: "from-emerald-100 to-white",
-  birthday: "from-gold/40 to-mickey/10",
+  birthday: "from-amber-100 to-rose-100",
 };
 
 const chapterLabels: Record<string, string> = {
@@ -101,12 +102,12 @@ export function DayDetailModal({
             animate={{ opacity: 1, y: 0, scale: 1 }}
             exit={{ opacity: 0, y: 24, scale: 0.98 }}
             transition={{ type: "spring", stiffness: 380, damping: 32 }}
-            className={`relative z-10 w-full sm:max-w-lg max-h-[92vh] overflow-y-auto rounded-t-3xl sm:rounded-3xl bg-gradient-to-br shadow-2xl pb-[var(--safe-bottom)] ${themeStyles[day.theme] ?? "from-white to-white"}`}
+            className={`relative z-10 w-full sm:max-w-lg max-h-[92vh] overflow-y-auto rounded-t-3xl sm:rounded-3xl modal-panel bg-gradient-to-br pb-[var(--safe-bottom)] ${themeStyles[day.theme] ?? "from-white to-white"}`}
           >
             <button
               type="button"
               onClick={onClose}
-              className="absolute top-3 right-3 z-20 w-10 h-10 rounded-full bg-white/95 shadow flex items-center justify-center text-ink/70 hover:text-ink"
+              className="absolute top-3 right-3 z-20 w-10 h-10 rounded-full bg-white shadow flex items-center justify-center text-ink/70 hover:text-ink"
               aria-label="Cerrar modal"
             >
               <X className="w-5 h-5" />
@@ -153,10 +154,10 @@ export function DayDetailModal({
               )}
 
               <div className="flex flex-wrap gap-2 mb-3">
-                <span className="text-xs font-display font-semibold px-2.5 py-1 rounded-full bg-white/80 text-mk-blue">
+                <span className="text-xs font-display font-semibold px-2.5 py-1 rounded-full bg-white text-mk-blue">
                   {chapterLabels[day.chapter] ?? day.chapter}
                 </span>
-                <span className="text-xs font-mono px-2.5 py-1 rounded-full bg-white/80 text-ink/60">
+                <span className="text-xs font-mono px-2.5 py-1 rounded-full bg-white text-ink/60">
                   {day.date}
                 </span>
               </div>
@@ -174,7 +175,7 @@ export function DayDetailModal({
               )}
 
               {highlight && (
-                <div className="mt-4 text-sm font-semibold bg-white/80 rounded-xl px-3 py-2.5 border border-gold/30">
+                <div className="mt-4 text-sm font-semibold bg-white rounded-xl px-3 py-2.5 border border-gold/30">
                   {highlight}
                 </div>
               )}
@@ -186,7 +187,7 @@ export function DayDetailModal({
                 {activities.map((a) => (
                   <li
                     key={`${a.time ?? ""}-${a.title}`}
-                    className="flex gap-2.5 text-sm text-ink/80 bg-white/70 rounded-xl px-3 py-2.5"
+                    className="flex gap-2.5 text-sm text-ink/80 bg-white rounded-xl px-3 py-2.5"
                   >
                     {a.time ? (
                       <span className="font-mono text-xs bg-mk-blue/10 text-mk-blue rounded px-1.5 py-0.5 shrink-0 h-fit">
@@ -204,7 +205,7 @@ export function DayDetailModal({
               </ul>
 
               {day.pending && day.pending.length > 0 && (
-                <div className="mt-4 text-xs bg-amber-100/90 border border-amber-300/60 rounded-xl px-3 py-2.5 text-amber-900">
+                <div className="mt-4 text-xs bg-amber-100 border border-amber-300 rounded-xl px-3 py-2.5 text-amber-900">
                   <div className="font-display font-semibold mb-1">
                     Pendiente
                   </div>

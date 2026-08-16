@@ -31,10 +31,11 @@ export const pendingItems = [
     detail: "Confirmar compra de Halloween Horror Nights y si llevan Express.",
   },
   {
-    id: "nyc-plan",
-    label: "Plan día a día NYC",
+    id: "nyc-rangers",
+    label: "Entradas Rangers (11/10, MSG)",
     status: "pending" as const,
-    detail: "Lista de deseos o itinerario detallado (base Chelsea / High Line).",
+    detail:
+      "Rangers vs Vancouver Canucks, 18:00. Desde ~US$132 p/p (~US$660–700 el grupo). Preventa 17/08 10:00am EDT en Ticketmaster.",
   },
   {
     id: "van",

@@ -509,8 +509,18 @@ export const itinerary: ItineraryDay[] = [
       {
         time: "15:00+",
         title: "Check-in 166A Chelsea",
-        detail: "UberXL desde LGA",
+        detail: "UberXL desde LGA · dejar valijas y descansar un rato",
         type: "hotel",
+      },
+      {
+        title: "Times Square",
+        detail: "Caminata corta para ubicarse y sentir la energía de la ciudad",
+        type: "event",
+      },
+      {
+        title: "Cena en Hell's Kitchen",
+        detail: "Buena zona de restaurantes cerca de Times Square",
+        type: "meal",
       },
     ],
   },
@@ -518,12 +528,13 @@ export const itinerary: ItineraryDay[] = [
     day: 13,
     date: "2026-10-11",
     dateLabel: "dom 11 oct",
-    title: "NYC — Día libre",
-    subtitle: "Base Chelsea",
+    title: "Estatua de la Libertad + Rangers",
+    subtitle: "Downtown de día · NHL en el Madison a la noche",
     theme: "nyc",
     chapter: "nyc",
+    highlight: "🏒 Rangers vs Vancouver Canucks · 18:00 · Madison Square Garden",
     description:
-      "Primera jornada completa en la ciudad. High Line y Chelsea Market a pasos del depto.",
+      "Ferry a la Estatua de la Libertad y Ellis Island, downtown financiero y 9/11 Memorial. A la noche, partido de NHL en el Madison Square Garden.",
     activities: [
       {
         time: "08:30",
@@ -532,90 +543,179 @@ export const itinerary: ItineraryDay[] = [
         type: "event",
       },
       {
-        time: "10:00",
-        title: "High Line + Chelsea Market",
-        detail: "A pasos de 166A",
+        title: "Statue of Liberty & Ellis Island",
+        detail: "Ferry desde Battery Park — reservar con anticipación",
         type: "event",
       },
       {
-        title: "Tarde libre",
-        detail: "Manhattan según ganas del grupo",
+        title: "Wall Street & Charging Bull",
+        detail: "El corazón financiero de la ciudad",
+        type: "event",
+      },
+      {
+        title: "9/11 Memorial",
+        detail: "Memorial exterior (no incluye el museo). Espacio emotivo",
+        type: "event",
+      },
+      {
+        time: "18:00",
+        title: "Rangers vs Vancouver Canucks",
+        detail:
+          "Madison Square Garden · ~2.5 hs · llegar 30–45 min antes · desde ~US$132 p/p",
         type: "event",
       },
     ],
-    pending: ["Armar plan detallado NYC"],
+    pending: ["Comprar entradas Rangers (Ticketmaster)"],
   },
   {
     day: 14,
     date: "2026-10-12",
     dateLabel: "lun 12 oct",
-    title: "NYC",
-    subtitle: "Por definir",
+    title: "Central Park + museos",
+    subtitle: "The Met · 5th Avenue · Museo de Historia Natural (gratis)",
     theme: "nyc",
     chapter: "nyc",
+    description:
+      "Mañana en Central Park, el Met al mediodía y 5th Avenue a la tarde. Cierre en el Museo de Historia Natural en la franja gratuita de 16:30 a 17:30.",
     activities: [
       {
         time: "09:00",
-        title: "Levantarse",
-        detail: "Día a armar con el grupo",
+        title: "Central Park",
+        detail: "Bethesda Terrace y Bow Bridge — ideal alquilar bicis",
         type: "event",
       },
-      { title: "Itinerario NYC — por completar", type: "event" },
+      {
+        title: "Metropolitan Museum of Art",
+        detail: "Uno de los mejores museos del mundo. Imperdible",
+        type: "event",
+      },
+      {
+        title: "5th Avenue",
+        detail: "Recorrida por la avenida, tiendas y arquitectura icónica",
+        type: "shopping",
+      },
+      {
+        time: "16:30–17:30",
+        title: "American Museum of Natural History (gratis)",
+        detail:
+          "Franja de entrada gratuita. Ir directo al 4to piso: dinosaurios y T-Rex. Sin reserva online",
+        type: "event",
+      },
+      {
+        title: "Cena cerca de Central Park",
+        detail: "Para descansar las piernas después de un día de caminata",
+        type: "meal",
+      },
     ],
-    pending: ["Ideas / deseos del grupo"],
   },
   {
     day: 15,
     date: "2026-10-13",
     dateLabel: "mar 13 oct",
-    title: "NYC",
-    subtitle: "Por definir",
+    title: "Brooklyn",
+    subtitle: "Brooklyn Bridge · DUMBO · Williamsburg",
     theme: "nyc",
     chapter: "nyc",
+    description:
+      "Cruzar el Brooklyn Bridge caminando, la foto clásica en DUMBO y tarde-noche en Williamsburg.",
     activities: [
       {
         time: "09:00",
-        title: "Levantarse",
-        detail: "Día a armar con el grupo",
+        title: "Brooklyn Bridge",
+        detail: "Crúcenlo caminando desde Manhattan. Vistas espectaculares",
         type: "event",
       },
-      { title: "Itinerario NYC — por completar", type: "event" },
+      {
+        title: "DUMBO",
+        detail: "La foto clásica del puente de Manhattan y el Empire State",
+        type: "event",
+      },
+      {
+        title: "Williamsburg",
+        detail: "Barrio bohemio: vintage shops, arte callejero y buena onda",
+        type: "event",
+      },
+      {
+        title: "Cena en Williamsburg",
+        detail: "Gran oferta gastronómica y bares con rooftop",
+        type: "meal",
+      },
     ],
   },
   {
     day: 16,
     date: "2026-10-14",
     dateLabel: "mié 14 oct",
-    title: "NYC",
-    subtitle: "Por definir",
+    title: "High Line + Top of the Rock",
+    subtitle: "Chelsea a pie · Hudson Yards · atardecer desde el mirador",
     theme: "nyc",
     chapter: "nyc",
+    description:
+      "Día por el barrio: High Line, Chelsea Market y Hudson Yards. Cierre en Top of the Rock justo antes del atardecer.",
     activities: [
       {
-        time: "09:00",
-        title: "Levantarse",
-        detail: "Día a armar con el grupo",
+        time: "09:30",
+        title: "High Line",
+        detail: "Parque elevado sobre una vieja línea de tren. Muy fotogénico",
         type: "event",
       },
-      { title: "Itinerario NYC — por completar", type: "event" },
+      {
+        title: "Chelsea Market",
+        detail: "Perfecto para almorzar: muchísimas opciones bajo un mismo techo",
+        type: "meal",
+      },
+      {
+        title: "Vessel & Hudson Yards",
+        detail: "Arquitectura moderna y shopping",
+        type: "shopping",
+      },
+      {
+        title: "Top of the Rock",
+        detail:
+          "Ir antes del atardecer: ciudad de día y de noche. Vista de Central Park + Empire State. Abierto hasta medianoche",
+        type: "event",
+      },
     ],
   },
   {
     day: 17,
     date: "2026-10-15",
     dateLabel: "jue 15 oct",
-    title: "NYC",
-    subtitle: "Por definir",
+    title: "SoHo + Empire State",
+    subtitle: "Downtown de día · Empire State al atardecer",
     theme: "nyc",
     chapter: "nyc",
+    description:
+      "SoHo, Greenwich Village (con las primeras decoraciones de Halloween) y Little Italy. A la tarde-noche, el Empire State.",
     activities: [
       {
-        time: "09:00",
-        title: "Levantarse",
-        detail: "Último día completo en NYC",
+        time: "09:30",
+        title: "SoHo",
+        detail: "Calles empedradas, arquitectura cast-iron y shopping",
+        type: "shopping",
+      },
+      {
+        title: "Greenwich Village",
+        detail:
+          "Encanto europeo, cafés y Washington Square Park. Época temprana de decoraciones de Halloween",
         type: "event",
       },
-      { title: "Itinerario NYC — por completar", type: "event" },
+      {
+        title: "Little Italy & Chinatown",
+        detail: "Ideal para caminar y picar algo distinto",
+        type: "meal",
+      },
+      {
+        title: "Empire State Building",
+        detail:
+          "Ir de tarde y quedarse hasta la noche, con la ciudad iluminada. Abierto hasta las 2am",
+        type: "event",
+      },
+      {
+        title: "Rooftop bar",
+        detail: "Buen cierre de día con vistas de la ciudad",
+        type: "meal",
+      },
     ],
   },
   {
@@ -628,7 +728,7 @@ export const itinerary: ItineraryDay[] = [
     chapter: "nyc",
     highlight: "✈️ Llegada a Buenos Aires: sábado 17 oct · 11:05",
     description:
-      "Día en la ciudad + traslado a JFK. Estar en terminal ~20:30–21:00 para el AA 953.",
+      "Últimas compras, almuerzo relajado y valijas. Traslado a JFK: estar en terminal ~20:30–21:00 para el AA 953.",
     activities: [
       {
         time: "09:00",
@@ -637,8 +737,18 @@ export const itinerary: ItineraryDay[] = [
         type: "event",
       },
       {
-        title: "NYC de día",
-        detail: "Guarda-equipaje / late checkout",
+        title: "Últimas compras",
+        detail: "5th Avenue o algo que haya quedado pendiente",
+        type: "shopping",
+      },
+      {
+        title: "Almuerzo relajado",
+        detail: "Aprovechar el día libre antes del vuelo nocturno",
+        type: "meal",
+      },
+      {
+        title: "Preparar valijas",
+        detail: "Guarda-equipaje / late checkout — dejar todo listo con tiempo",
         type: "event",
       },
       {

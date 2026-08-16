@@ -223,7 +223,7 @@ export function BirthdayModal({
             animate={{ opacity: 1, scale: 1, y: 0 }}
             exit={{ opacity: 0, scale: 0.94, y: 16 }}
             transition={{ type: "spring", stiffness: 340, damping: 28 }}
-            className="relative z-[2] w-full max-w-md rounded-3xl overflow-hidden shadow-2xl border border-gold/40 bg-gradient-to-br from-[#fff8e7] via-white to-[#ffe8ec]"
+            className="relative z-[2] w-full max-w-md rounded-3xl overflow-hidden shadow-2xl border border-gold/40 bg-white bg-gradient-to-br from-[#fff8e7] via-white to-[#ffe8ec]"
           >
             <div className="absolute inset-x-0 top-0 h-1.5 bg-gradient-to-r from-mickey via-gold to-mk-blue" />
 
