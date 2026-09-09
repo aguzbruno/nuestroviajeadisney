@@ -22,7 +22,7 @@ export default function DisneyPage() {
         <div className="absolute inset-0 flex flex-col justify-end p-6 text-white">
           <h1 className="font-display text-4xl md:text-5xl font-bold">Disney World</h1>
           <p className="opacity-90 mt-1">
-            01–04 oct · Entrada temprana hotel Disney · MK → EPCOT → Hollywood → Animal Kingdom
+            01–04 oct · Entrada temprana hotel Disney · EPCOT → Hollywood → MK → Animal Kingdom
           </p>
         </div>
       </div>

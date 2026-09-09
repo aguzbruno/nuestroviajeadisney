@@ -364,7 +364,7 @@ function MobileScrollStory({
       <Chapter
         id="disney"
         title="Reino Disney"
-        subtitle="Entrada temprana · MK → EPCOT → HS → AK + cena 60 · cambio a Endless Summer."
+        subtitle="Entrada temprana · EPCOT → HS → MK → AK + cena 60 · cambio a Endless Summer."
         cta="Explorar parques Disney"
         href="/disney"
       >
@@ -462,7 +462,7 @@ function DesktopAlbum({
         label: "Disney",
         title: "Reino Disney",
         subtitle:
-          "Entrada temprana · MK → EPCOT → HS → AK + cena 60 · cambio de hotel.",
+          "Entrada temprana · EPCOT → HS → MK → AK + cena 60 · cambio de hotel.",
         cta: "Explorar parques",
         href: "/disney",
         emoji: "🏰",

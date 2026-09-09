@@ -99,98 +99,13 @@ const img = {
 
 export const parks: Park[] = [
   {
-    id: "magic-kingdom",
-    name: "Magic Kingdom",
-    resort: "disney",
-    slug: "magic-kingdom",
-    closesApprox: "~23:00",
-    date: "2026-10-01",
-    dayNumber: 3,
-    color: "#1A5FB4",
-    emoji: "🏰",
-    image: images.magicKingdom,
-    description:
-      "El corazón de Disney World: castillo, Main Street y fuegos. Ideal para empezar el tramo Disney con magia total.",
-    earlyEntry: disneyEarlyEntry,
-    attractions: [
-      {
-        name: "Seven Dwarfs Mine Train",
-        mustDo: true,
-        tip: "Rope drop o Lightning Lane",
-        category: "coaster",
-        description:
-          "Montaña rusa familiar por la mina de los siete enanitos: curvas suaves, vagonetas que basculan y un final con diamantes brillando.",
-        image: img.mineTrain,
-        url: "https://disneyworld.disney.go.com/attractions/magic-kingdom/seven-dwarfs-mine-train/",
-      },
-      {
-        name: "Space Mountain",
-        mustDo: true,
-        category: "coaster",
-        description:
-          "Clásico coaster a oscuras en Tomorrowland: velocidad, giros y la sensación de volar entre estrellas.",
-        image: img.space,
-        url: "https://disneyworld.disney.go.com/attractions/magic-kingdom/space-mountain/",
-      },
-      {
-        name: "Tiana's Bayou Adventure",
-        mustDo: true,
-        category: "water",
-        description:
-          "Aventura acuática por el bayou de Nueva Orleans con la princesa Tiana, música y efectos sorpresa al final.",
-        image: img.bayou,
-        url: "https://disneyworld.disney.go.com/attractions/magic-kingdom/tianas-bayou-adventure/",
-      },
-      {
-        name: "Haunted Mansion",
-        category: "dark-ride",
-        description:
-          "Mansión encantada con 999 fantasmas felices: dark ride clásico, humor gótico y stretch room legendario.",
-        image: img.haunted,
-        url: "https://disneyworld.disney.go.com/attractions/magic-kingdom/haunted-mansion/",
-      },
-      {
-        name: "Pirates of the Caribbean",
-        category: "dark-ride",
-        description:
-          "Barco a través de bahías piratas: cañones, botín y el espíritu de Jack Sparrow en un dark ride icónico.",
-        image: img.pirates,
-        url: "https://disneyworld.disney.go.com/attractions/magic-kingdom/pirates-of-the-caribbean/",
-      },
-      {
-        name: "Jungle Cruise",
-        tip: "Clásico con humor",
-        category: "boat",
-        description:
-          "Crucero por ríos 'exóticos' con skippers que cuentan chistes malos a propósito. Clásico de Adventureland.",
-        image: img.jungle,
-        url: "https://disneyworld.disney.go.com/attractions/magic-kingdom/jungle-cruise/",
-      },
-      {
-        name: "TRON Lightcycle / Run",
-        mustDo: true,
-        tip: "Si está operativo — cola larga",
-        category: "coaster",
-        description:
-          "Coaster de alta velocidad en lightcycles estilo TRON: inclinados hacia adelante, luces neón y launch potente.",
-        image: img.tron,
-        url: "https://disneyworld.disney.go.com/attractions/magic-kingdom/tron-lightcycle-run/",
-      },
-    ],
-    tips: [
-      "Entrada temprana Disney (~08:30) — All-Star Music",
-      "Llegar listos para rope drop / primeras filas",
-      "Ver fireworks desde Main Street o puente del castillo",
-    ],
-  },
-  {
     id: "epcot",
     name: "EPCOT",
     resort: "disney",
     slug: "epcot",
     closesApprox: "~21:00",
-    date: "2026-10-02",
-    dayNumber: 4,
+    date: "2026-10-01",
+    dayNumber: 3,
     color: "#5B8DEF",
     emoji: "🌐",
     image: images.epcot,
@@ -262,8 +177,8 @@ export const parks: Park[] = [
     resort: "disney",
     slug: "hollywoodwood-studios",
     closesApprox: "~21:00",
-    date: "2026-10-03",
-    dayNumber: 5,
+    date: "2026-10-02",
+    dayNumber: 4,
     color: "#C0392B",
     emoji: "🎬",
     image: images.hollywood,
@@ -329,6 +244,91 @@ export const parks: Park[] = [
       "Entrada temprana Disney (~08:30) — All-Star Music",
       "Rope drop a Rise o Slinky",
       "Galaxy's Edge para fotos",
+    ],
+  },
+  {
+    id: "magic-kingdom",
+    name: "Magic Kingdom",
+    resort: "disney",
+    slug: "magic-kingdom",
+    closesApprox: "~23:00",
+    date: "2026-10-03",
+    dayNumber: 5,
+    color: "#1A5FB4",
+    emoji: "🏰",
+    image: images.magicKingdom,
+    description:
+      "El corazón de Disney World: castillo, Main Street y fuegos. Magia total antes de cerrar el tramo con Animal Kingdom.",
+    earlyEntry: disneyEarlyEntry,
+    attractions: [
+      {
+        name: "Seven Dwarfs Mine Train",
+        mustDo: true,
+        tip: "Rope drop o Lightning Lane",
+        category: "coaster",
+        description:
+          "Montaña rusa familiar por la mina de los siete enanitos: curvas suaves, vagonetas que basculan y un final con diamantes brillando.",
+        image: img.mineTrain,
+        url: "https://disneyworld.disney.go.com/attractions/magic-kingdom/seven-dwarfs-mine-train/",
+      },
+      {
+        name: "Space Mountain",
+        mustDo: true,
+        category: "coaster",
+        description:
+          "Clásico coaster a oscuras en Tomorrowland: velocidad, giros y la sensación de volar entre estrellas.",
+        image: img.space,
+        url: "https://disneyworld.disney.go.com/attractions/magic-kingdom/space-mountain/",
+      },
+      {
+        name: "Tiana's Bayou Adventure",
+        mustDo: true,
+        category: "water",
+        description:
+          "Aventura acuática por el bayou de Nueva Orleans con la princesa Tiana, música y efectos sorpresa al final.",
+        image: img.bayou,
+        url: "https://disneyworld.disney.go.com/attractions/magic-kingdom/tianas-bayou-adventure/",
+      },
+      {
+        name: "Haunted Mansion",
+        category: "dark-ride",
+        description:
+          "Mansión encantada con 999 fantasmas felices: dark ride clásico, humor gótico y stretch room legendario.",
+        image: img.haunted,
+        url: "https://disneyworld.disney.go.com/attractions/magic-kingdom/haunted-mansion/",
+      },
+      {
+        name: "Pirates of the Caribbean",
+        category: "dark-ride",
+        description:
+          "Barco a través de bahías piratas: cañones, botín y el espíritu de Jack Sparrow en un dark ride icónico.",
+        image: img.pirates,
+        url: "https://disneyworld.disney.go.com/attractions/magic-kingdom/pirates-of-the-caribbean/",
+      },
+      {
+        name: "Jungle Cruise",
+        tip: "Clásico con humor",
+        category: "boat",
+        description:
+          "Crucero por ríos 'exóticos' con skippers que cuentan chistes malos a propósito. Clásico de Adventureland.",
+        image: img.jungle,
+        url: "https://disneyworld.disney.go.com/attractions/magic-kingdom/jungle-cruise/",
+      },
+      {
+        name: "TRON Lightcycle / Run",
+        mustDo: true,
+        tip: "Si está operativo — cola larga",
+        category: "coaster",
+        description:
+          "Coaster de alta velocidad en lightcycles estilo TRON: inclinados hacia adelante, luces neón y launch potente.",
+        image: img.tron,
+        url: "https://disneyworld.disney.go.com/attractions/magic-kingdom/tron-lightcycle-run/",
+      },
+    ],
+    tips: [
+      "Entrada temprana Disney (~08:30) — All-Star Music",
+      "Llegar listos para rope drop / primeras filas",
+      "Ver fireworks desde Main Street o puente del castillo",
     ],
   },
   {
